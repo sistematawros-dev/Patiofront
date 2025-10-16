@@ -60,7 +60,8 @@ async function ensureAuth() {
           btn?.click?.();
         }
 
-      } catch (e) { alert('Usuario ou senha invalido '); }
+      } catch (e) {console.error('Login falhou:', e);
+  alert((e && e.message) || 'Falha no login');}
       return;
     }
   })();
