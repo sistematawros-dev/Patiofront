@@ -7,7 +7,7 @@
   const submitButton = form?.querySelector('button[type="submit"]');
 
   loginInput?.addEventListener('input', () => {
-    loginInput.value = loginInput.value.toUpperCase();
+    //loginInput.value = loginInput.value.toUpperCase();
   });
 
   function setSubmitting(isSubmitting) {
@@ -50,3 +50,4 @@ function onLoginSucesso(user, email) {
   Session?.startSession?.(1);
   location.replace('./menu.html');
 }
+
