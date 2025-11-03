@@ -5,35 +5,12 @@
 
   let token = localStorage.getItem(TOKEN_KEY) || '';
 
-  //function getApiBase() {
-   // return localStorage.getItem(API_BASE_KEY) || 'http://localhost:3333';
-  //}
-
-
-   const API_BASE_KEY = 'API_BASE';
-
-function getApiBase() {
-  // 1) Se o usuário definiu manualmente, respeite:
-  const fromStorage = localStorage.getItem(API_BASE_KEY);
-  if (fromStorage) return fromStorage;
-
-  // 2) Auto: se o site está no seu domínio, aponte para a API pública (https)
-  const host = location.hostname;
-  if (host.endsWith('tawros.com.br')) {
-    // produção e homolog usam a mesma API pública (ajuste se tiver API separada)
-    return 'https://api.sistema.tawros.com.br';
+  function getApiBase() {
+    return localStorage.getItem(API_BASE_KEY) || 'https://api.sistema.tawros.com.br';
   }
 
-  // 3) Se estiver no domínio temporário da DigitalOcean (preview)
-  if (host.endsWith('.ondigitalocean.app')) {
-    return 'https://api.sistema.tawros.com.br';
-    // ou, se você tiver uma API de homolog/preview:
-    // return 'https://api-hml.tawros.com.br';
-  }
 
-  // 4) Dev local
-  return 'http://localhost:3333';
-}
+  
 
 
   function setToken(value) {
@@ -113,4 +90,5 @@ function getApiBase() {
     },
   };
 })(window);
+
 
