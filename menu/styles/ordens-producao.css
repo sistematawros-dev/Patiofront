@@ -1,0 +1,208 @@
+/* ========================================
+   ORDENS DE PRODUÇÃO
+   Baseado no design Figma: "Planejamento"
+   ======================================== */
+
+/* Importar estilos base de pedidos */
+@import url('pedidos.css');
+
+/* === CUSTOMIZAÇÕES ESPECÍFICAS === */
+
+/* Progress Bar - Elemento único desta tela */
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.progress-bar {
+    position: relative;
+    width: 100px;
+    height: 8px;
+    background: #F3F4F6;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #0068AB 0%, #01A4F6 100%);
+    border-radius: var(--radius-full);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.progress-text {
+    min-width: 40px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-secondary);
+    text-align: right;
+}
+
+/* Estilos de progresso por estado */
+.progress-fill[style*="100%"] {
+    background: linear-gradient(90deg, #10B981 0%, #34D399 100%);
+}
+
+.progress-fill[style*="width: 0"] {
+    background: #E5E7EB;
+}
+
+/* === BADGES ADICIONAIS === */
+.badge-em-producao {
+    background: #EFF6FF;
+    color: #1E40AF;
+    border: 1px solid #BFDBFE;
+}
+
+.badge-em-preparacao {
+    background: #FEF3C7;
+    color: #92400E;
+    border: 1px solid #FDE68A;
+}
+
+.badge-finalizado {
+    background: #ECFDF5;
+    color: #065F46;
+    border: 1px solid #A7F3D0;
+}
+
+/* === COLUNA DE PROGRESSO === */
+.data-table tbody td:has(.progress-container) {
+    min-width: 180px;
+}
+
+/* === HOVER STATES ESPECÍFICOS === */
+.data-table tbody tr:hover .progress-bar {
+    box-shadow: 0 0 0 4px rgba(0, 104, 171, 0.1);
+}
+
+.data-table tbody tr:hover .progress-text {
+    color: var(--text-primary);
+}
+
+/* === PREVISÃO DE DATA === */
+.data-table tbody td:nth-child(7) {
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+}
+
+/* Data próxima (urgente) */
+.data-table tbody tr[data-urgente="true"] td:nth-child(7) {
+    color: #DC2626;
+    font-weight: var(--font-weight-semibold);
+}
+
+/* === INDICADORES VISUAIS === */
+.ordem-urgente::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #DC2626 0%, #F87171 100%);
+}
+
+.ordem-atrasada::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #F59E0B 0%, #FBBF24 100%);
+}
+
+/* === ESTATÍSTICAS NO TOPO === */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.stat-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.stat-label {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: var(--font-weight-semibold);
+}
+
+.stat-value {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+}
+
+.stat-progress {
+    font-size: var(--font-size-sm);
+    color: var(--text-tertiary);
+}
+
+/* === RESPONSIVO === */
+@media (max-width: 768px) {
+    .progress-bar {
+        width: 60px;
+    }
+
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
+
+    .data-table tbody td:has(.progress-container) {
+        min-width: 140px;
+    }
+}
+
+@media (max-width: 480px) {
+    .progress-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .progress-bar {
+        width: 100%;
+    }
+
+    .progress-text {
+        text-align: left;
+    }
+}

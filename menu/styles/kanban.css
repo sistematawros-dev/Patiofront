@@ -1,0 +1,368 @@
+/* ========================================
+   KANBAN - Board de Produção
+   Baseado no design Figma: "Container"
+   Dimensões: 2252x763px
+   ======================================== */
+
+.kanban-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: var(--spacing-xl);
+    padding: var(--spacing-xl);
+    background: var(--bg-secondary);
+    min-height: calc(100vh - 64px);
+}
+
+/* Cabeçalho do Kanban */
+.kanban-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+
+.kanban-controls {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+/* Board do Kanban */
+.kanban-board {
+    display: flex;
+    gap: 16px; /* Espaçamento exato do Figma */
+    overflow-x: auto;
+    flex: 1;
+    padding-bottom: var(--spacing-lg);
+}
+
+/* Colunas */
+.kanban-column {
+    display: flex;
+    flex-direction: column;
+    min-width: 308px; /* Largura exata do Figma */
+    max-width: 308px;
+    background: #F7F7F8; /* Cor exata do Figma */
+    border: none; /* Sem borda conforme Figma */
+    border-radius: 10px; /* Border radius exato do Figma */
+    height: fit-content;
+    max-height: calc(100vh - 200px);
+    box-shadow: none; /* Sem sombra conforme Figma */
+    transition: all var(--transition-base);
+}
+
+.kanban-column:hover {
+    background: #EFEFEF; /* Hover suave */
+}
+
+.kanban-column-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px; /* Padding consistente */
+    border-bottom: none; /* Sem borda inferior */
+}
+
+.column-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600; /* Semibold */
+    font-size: 14px; /* Tamanho padrão */
+    color: #0A0A0A; /* Texto principal */
+}
+
+.column-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.column-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 8px;
+    background: #FFFFFF; /* Branco para contraste */
+    border-radius: 12px; /* Mais arredondado */
+    font-size: 12px;
+    font-weight: 600;
+    color: #3F3F46; /* Cor do contador */
+    border: 1px solid #E7E9E9; /* Borda sutil */
+}
+
+/* Cards Container */
+.kanban-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Espaçamento entre cards do Figma */
+    padding: 12px; /* Padding interno da coluna */
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Cards */
+.kanban-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Espaçamento interno do card (itemSpacing do Figma) */
+    padding: 16px; /* Padding exato do Figma */
+    background: #FFFFFF; /* Branco puro do Figma */
+    border: 1px solid #000000; /* Borda preta conforme Figma */
+    border-radius: 8px; /* Border radius exato do Figma */
+    width: 284px; /* Largura exata do card no Figma */
+    cursor: grab;
+    transition: all var(--transition-base);
+}
+
+.kanban-card:hover {
+    border-color: #333333; /* Borda levemente mais clara no hover */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+.kanban-card:active {
+    cursor: grabbing;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.card-id {
+    font-size: 12px;
+    font-weight: 600;
+    color: #0068AB; /* Azul primário */
+    background: #F5FBFF; /* Azul muito claro */
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+.icon-button-sm {
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #717182;
+    transition: all var(--transition-base);
+    flex-shrink: 0;
+}
+
+.icon-button-sm:hover {
+    background: #F3F4F6;
+    color: #0A0A0A;
+}
+
+.card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0A0A0A;
+    margin: 0;
+    line-height: 20px;
+}
+
+.card-subtitle {
+    font-size: 12px;
+    color: #717182;
+    margin: 0;
+    line-height: 18px;
+}
+
+.card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid #E7E9E9; /* Divisor sutil */
+    margin-top: auto; /* Empurra para o final do card */
+}
+
+.card-quantity {
+    font-size: 12px;
+    font-weight: 500;
+    color: #0A0A0A;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.card-date {
+    font-size: 12px;
+    color: #717182;
+}
+
+/* User Info no Card */
+.card-user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+}
+
+.card-user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #E7E9E9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #3F3F46;
+    flex-shrink: 0;
+}
+
+.card-user-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.card-user-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: #0A0A0A;
+    line-height: 16px;
+}
+
+.card-user-role {
+    font-size: 11px;
+    color: #717182;
+    line-height: 14px;
+}
+
+/* Separador no Card */
+.card-divider {
+    height: 1px;
+    background: #E7E9E9;
+    margin: 0;
+}
+
+/* Info Container (Pedido, Quantidade, Data, etc) */
+.card-info-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #3F3F46;
+}
+
+.card-info-row i {
+    width: 16px;
+    height: 16px;
+    color: #717182;
+}
+
+.card-info-label {
+    color: #717182;
+    font-weight: 400;
+}
+
+.card-info-value {
+    color: #0A0A0A;
+    font-weight: 500;
+}
+
+/* Muda Container (se aplicável) */
+.card-muda {
+    background: #F9FAFA;
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.card-muda-label {
+    color: #717182;
+}
+
+.card-muda-value {
+    color: #0A0A0A;
+    font-weight: 500;
+}
+
+/* Drag & Drop States */
+.kanban-card.dragging {
+    opacity: 0.5;
+}
+
+.kanban-column.drag-over {
+    background: #E7E9E9;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .kanban-board {
+        gap: 12px;
+    }
+
+    .kanban-column {
+        min-width: 308px; /* Mantém largura do Figma mesmo no mobile */
+        max-width: 308px;
+    }
+
+    .kanban-card {
+        width: 284px; /* Mantém largura exata */
+    }
+}
+
+@media (max-width: 480px) {
+    .kanban-container {
+        padding: 12px;
+    }
+
+    .kanban-column {
+        min-width: 280px; /* Reduz levemente no mobile pequeno */
+        max-width: 280px;
+    }
+
+    .kanban-card {
+        width: 256px;
+    }
+}
+
+/* Progress Bar (para ordens de produção) */
+.progress-bar {
+    width: 100px;
+    height: 6px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: var(--spacing-sm);
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--primary-blue);
+    border-radius: var(--radius-full);
+    transition: width var(--transition-base);
+}
+
+.progress-text {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    font-weight: var(--font-weight-medium);
+}
+
+/* Badges de status específicos para produção */
+.badge-info {
+    background: #EFF6FF;
+    color: #1E40AF;
+    border: 1px solid #BFDBFE;
+}
