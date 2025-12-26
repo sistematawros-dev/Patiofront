@@ -1,0 +1,286 @@
+/* ========================================
+   DRAWER - SALA DE CORTE
+   ======================================== */
+
+/* Reutiliza os estilos base do drawer anterior */
+
+/* Controle por Bandeja */
+.drawer-bandeja-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.drawer-bandeja-title {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #18191A;
+}
+
+.drawer-bandeja-total {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #61666A;
+}
+
+.drawer-bandeja-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.drawer-bandeja-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #F9FAFA;
+    border: 1px solid #E7E9E9;
+    border-radius: 6px;
+}
+
+.drawer-bandeja-number {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #61666A;
+}
+
+.drawer-bandeja-name {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #18191A;
+}
+
+.drawer-bandeja-select {
+    min-width: 150px;
+    height: 36px;
+    padding: 0 12px;
+    background: #FFFFFF;
+    border: 1px solid #E7E9E9;
+    border-radius: 6px;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    color: #18191A;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2361666A' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+}
+
+.drawer-bandeja-select:focus {
+    outline: none;
+    border-color: #0068AB;
+    box-shadow: 0 0 0 3px rgba(0, 104, 171, 0.1);
+}
+
+/* Perdas no Corte */
+.drawer-perdas-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    align-items: center;
+    padding: 16px;
+    background: #F9FAFA;
+    border: 1px solid #E7E9E9;
+    border-radius: 6px;
+}
+
+.drawer-perdas-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.drawer-perdas-label {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #61666A;
+    line-height: 1.4;
+}
+
+.drawer-perdas-value {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #18191A;
+}
+
+.drawer-perdas-input {
+    width: 100px;
+    height: 36px;
+    padding: 0 12px;
+    background: #FFFFFF;
+    border: 1px solid #E7E9E9;
+    border-radius: 6px;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #18191A;
+    transition: all 0.2s ease;
+}
+
+.drawer-perdas-input:focus {
+    outline: none;
+    border-color: #0068AB;
+    box-shadow: 0 0 0 3px rgba(0, 104, 171, 0.1);
+}
+
+.drawer-perdas-input::placeholder {
+    color: #9CA3AF;
+    font-weight: 400;
+}
+
+.drawer-perdas-impacto {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.drawer-perdas-impacto-label {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #61666A;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.drawer-perdas-impacto-value {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #18191A;
+}
+
+/* Destino a Previsão */
+.drawer-destino-select {
+    width: 100%;
+    height: 40px;
+    padding: 0 12px;
+    background: #FFFFFF;
+    border: 1px solid #E7E9E9;
+    border-radius: 6px;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    color: #18191A;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2361666A' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+}
+
+.drawer-destino-select:focus {
+    outline: none;
+    border-color: #0068AB;
+    box-shadow: 0 0 0 3px rgba(0, 104, 171, 0.1);
+}
+
+.drawer-destino-label {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #61666A;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.drawer-previsao-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+/* Produto Info Box */
+.drawer-produto-info {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    padding: 16px;
+    background: #F9FAFA;
+    border: 1px solid #E7E9E9;
+    border-radius: 6px;
+}
+
+.drawer-produto-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.drawer-produto-label {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #61666A;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.drawer-produto-value {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #18191A;
+    line-height: 1.4;
+}
+
+/* Execução do Corte Grid */
+.drawer-execucao-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* Date Input */
+.drawer-date-input {
+    width: 100%;
+    height: 40px;
+    padding: 0 12px;
+    background: #FFFFFF;
+    border: 1px solid #E7E9E9;
+    border-radius: 6px;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    color: #18191A;
+    transition: all 0.2s ease;
+}
+
+.drawer-date-input:focus {
+    outline: none;
+    border-color: #0068AB;
+    box-shadow: 0 0 0 3px rgba(0, 104, 171, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .drawer-execucao-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .drawer-previsao-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .drawer-perdas-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .drawer-produto-info {
+        grid-template-columns: 1fr;
+    }
+}

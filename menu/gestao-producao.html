@@ -1,0 +1,2402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão da Produção - Tawros</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/figma-tokens.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/modals.css">
+    <link rel="stylesheet" href="styles/pedidos-figma.css">
+    <link rel="stylesheet" href="styles/pedidos-grid.css">
+    <link rel="stylesheet" href="styles/pedidos-detalhes-drawer.css">
+    <link rel="stylesheet" href="styles/planejar-item-modal.css">
+    <link rel="stylesheet" href="styles/cancelar-pedido-modal.css">
+    <link rel="stylesheet" href="styles/ordens-producao-kanban.css">
+    <link rel="stylesheet" href="styles/aguardando-semeio-drawer.css">
+    <link rel="stylesheet" href="styles/semeio-drawer.css">
+    <link rel="stylesheet" href="styles/germinacao-drawer.css">
+    <link rel="stylesheet" href="styles/casa-vegetacao-drawer.css">
+    <link rel="stylesheet" href="styles/sala-corte-drawer.css">
+    <link rel="stylesheet" href="styles/sala-fusao-drawer.css">
+
+    <!-- Script: Toggle View (definido antes do body para estar disponível nos onclick handlers) -->
+    <script>
+        window.toggleView = function(viewType) {
+            const producaoKanban = document.getElementById('producaoKanban');
+            const producaoLista = document.getElementById('producaoLista');
+            const viewButtons = document.querySelectorAll('.view-btn');
+
+            console.log('=== Toggle View ===');
+            console.log('View Type:', viewType);
+
+            if (!producaoKanban || !producaoLista) {
+                console.error('Elementos não encontrados!');
+                return;
+            }
+
+            if (viewType === 'kanban') {
+                producaoKanban.style.display = 'flex';
+                producaoLista.style.display = 'none';
+                if (viewButtons.length >= 2) {
+                    viewButtons[0].classList.add('active');
+                    viewButtons[1].classList.remove('active');
+                }
+                console.log('✓ Mostrando Kanban');
+            } else {
+                producaoKanban.style.display = 'none';
+                producaoLista.style.display = 'block';
+                if (viewButtons.length >= 2) {
+                    viewButtons[0].classList.remove('active');
+                    viewButtons[1].classList.add('active');
+                }
+                console.log('✓ Mostrando Lista');
+
+                // Reinicializar ícones do Lucide na tabela
+                setTimeout(() => {
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                }, 100);
+            }
+        };
+    </script>
+
+</head>
+<body>
+    <!-- Sidebar Component - Reutilizável -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+            <!-- Logo Container -->
+            <div class="logo-container">
+                <!-- Ícone (sempre visível) -->
+                <svg class="logo-icon" width="32" height="32" viewBox="0 0 193 151" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_compact)">
+                    <path d="M133.359 129.405V131.626C133.359 136.91 124.699 150.998 96.5001 150.998C68.3008 150.998 59.641 136.908 59.641 131.626V129.425L89.3823 116.896L103.627 116.907L133.357 129.407L133.359 129.405ZM106.661 69.2949H86.3467L60.1289 121.472L83.4862 111.738L88.2631 101.068L90.2781 96.5932L96.5076 82.7189L97.0272 83.8889L102.741 96.6043L104.752 101.08L109.529 111.749L132.875 121.455L106.665 69.2949H106.661ZM96.9098 37.551C54.5755 37.551 18.1056 22.3003 1.57749 0.34787C1.03183 -0.377555 -0.13212 0.122802 0.0131409 1.01749C6.48658 41.4199 47.4018 61.769 96.9098 61.769C146.418 61.769 184.363 40.6387 192.976 2.14097C193.179 1.22954 192.017 0.665941 191.438 1.39881C174.546 22.784 138.566 37.551 96.908 37.551H96.9098ZM28.773 52.5617C28.6668 52.4985 28.5644 52.4334 28.4583 52.3701L32.7509 69.6446C33.8665 74.1329 35.8405 78.3645 38.5614 82.107L58.0729 108.924L78.7224 67.831C59.5777 65.8444 42.5467 60.666 28.773 52.5617ZM163.184 52.3925C149.399 60.5898 132.726 65.824 114.283 67.8273L134.931 108.918L154.437 82.107C157.16 78.3664 159.132 74.1348 160.247 69.6464L164.777 51.4196C164.25 51.747 163.719 52.0725 163.181 52.3925H163.184Z" fill="url(#paint0_linear_compact)"/>
+                </g>
+                <defs>
+                    <linearGradient id="paint0_linear_compact" x1="96.5001" y1="151" x2="96.5001" y2="3.71337e-05" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#0B3C49"/>
+                        <stop offset="0.31" stop-color="#0B3240"/>
+                        <stop offset="0.83" stop-color="#0E1928"/>
+                        <stop offset="0.99" stop-color="#0F1020"/>
+                    </linearGradient>
+                    <clipPath id="clip0_compact">
+                        <rect width="193" height="151" fill="white"/>
+                    </clipPath>
+                </defs>
+                </svg>
+
+                <!-- Texto TAWROS (anima com o sidebar) -->
+                <svg class="logo-text" xmlns="http://www.w3.org/2000/svg" width="150" height="23" viewBox="0 0 189 23" fill="none">
+                    <g>
+                        <path d="M35.1538 5.02016H54.9317L56.0636 9.20912H42.8277L48.4121 10.8599V21.3832H42.8277V9.20912H36.2847L35.1538 5.02016Z" fill="url(#paint0_linear_text)"/>
+                        <path d="M87.4086 6.20828L90.5914 15.7763L93.7834 5.02016H99.5046L102.742 15.8199L105.948 6.20731C106.184 5.50026 106.87 5.02016 107.647 5.02016H111.975L106.025 21.3832H100.496C100.031 21.3832 99.6231 21.0903 99.4924 20.6635L96.5203 10.9326L93.5706 20.6626C93.4409 21.0903 93.0315 21.3842 92.5664 21.3842H87.1289L81.1787 5.02113H85.7113C86.4875 5.02113 87.1745 5.5022 87.4096 6.20925L87.4086 6.20828Z" fill="url(#paint1_linear_text)"/>
+                        <path d="M116.703 5.02792H131.89C135.605 5.02792 137.84 7.16653 137.84 10.374C137.84 13.3855 135.605 15.0207 132.255 15.2389L138.227 21.391H131.434L124.002 12.1411V21.391H118.417V7.64469L116.702 5.02889L116.703 5.02792ZM132.14 10.4176C132.14 9.13056 131.228 8.6718 129.267 8.6718H123.131L124.002 9.54955V12.1401H129.426C131.272 12.1401 132.139 11.66 132.139 10.4157L132.14 10.4176Z" fill="url(#paint2_linear_text)"/>
+                        <path d="M179.404 4.47411C182.094 4.47411 184.335 4.7515 186.206 5.10648C187.178 5.28979 187.892 6.08704 187.94 7.03365L188.065 9.47002C185.511 8.68441 182.777 8.22662 179.972 8.22662C177.168 8.22662 176.097 8.70672 176.097 9.535C176.097 12.2846 188.999 9.18584 188.999 16.364C188.999 19.9856 185.739 21.8837 179.95 21.8837C176.93 21.8837 174.215 21.3939 171.791 20.5908C170.962 20.3163 170.394 19.5831 170.35 18.7451L170.194 15.818C172.861 17.1263 175.915 17.8916 179.266 17.8916C181.956 17.8916 183.05 17.3465 183.05 16.4726C183.05 13.5707 170.194 16.6036 170.216 9.44674C170.238 6.06473 173.317 4.47217 179.402 4.47217L179.404 4.47411Z" fill="url(#paint3_linear_text)"/>
+                        <path d="M164.734 12.7492C164.731 12.6852 164.729 12.6212 164.725 12.5582C164.722 12.5038 164.717 12.4505 164.712 12.3972C164.708 12.3467 164.705 12.2953 164.699 12.2449C164.693 12.1857 164.686 12.1266 164.679 12.0674C164.674 12.0237 164.67 11.9801 164.664 11.9365C164.656 11.8734 164.646 11.8113 164.637 11.7483C164.631 11.7105 164.625 11.6726 164.619 11.6348C164.608 11.5689 164.596 11.5039 164.584 11.4389C164.578 11.405 164.572 11.372 164.565 11.338C164.552 11.2711 164.536 11.2042 164.521 11.1382C164.514 11.1082 164.508 11.0771 164.501 11.0471C164.485 10.9792 164.467 10.9132 164.45 10.8463C164.443 10.8182 164.436 10.7891 164.428 10.7609C164.41 10.6931 164.389 10.6271 164.369 10.5602C164.361 10.534 164.353 10.5068 164.345 10.4806C164.324 10.4137 164.301 10.3478 164.279 10.2828C164.27 10.2566 164.262 10.2314 164.253 10.2052C164.229 10.1402 164.205 10.0762 164.181 10.0122C164.171 9.986 164.16 9.95981 164.15 9.9346C164.125 9.87155 164.1 9.80948 164.072 9.74838C164.061 9.72122 164.049 9.69503 164.038 9.66788C164.011 9.60774 163.984 9.54955 163.956 9.49039C163.943 9.46226 163.928 9.43413 163.915 9.40601C163.888 9.34975 163.859 9.29447 163.83 9.23918C163.814 9.20912 163.798 9.17808 163.781 9.14801C163.753 9.09661 163.725 9.04521 163.696 8.99477C163.678 8.96374 163.66 8.93173 163.642 8.90069C162.208 9.86088 160.48 10.5621 158.561 10.9898C158.496 11.0073 158.431 11.0257 158.366 11.0422C158.381 11.0781 158.396 11.1159 158.41 11.1528C158.403 11.1547 158.396 11.1557 158.389 11.1576C158.639 11.7493 158.772 12.433 158.772 13.2012C158.772 16.0818 156.97 17.783 153.826 17.783C150.681 17.783 148.88 16.0818 148.88 13.2012C148.88 12.433 149.011 11.7493 149.263 11.1576C149.255 11.1557 149.248 11.1547 149.241 11.1528C149.254 11.1188 149.268 11.0839 149.282 11.0509C147.256 10.6475 145.441 9.96078 143.957 8.99186C143.957 8.99186 143.956 8.9938 143.955 8.99477C143.925 9.04521 143.897 9.09661 143.87 9.14801C143.853 9.17808 143.837 9.20912 143.821 9.23918C143.793 9.29447 143.764 9.34975 143.736 9.40601C143.722 9.43413 143.709 9.46226 143.695 9.49039C143.667 9.54955 143.64 9.60871 143.613 9.66788C143.601 9.69406 143.59 9.72122 143.579 9.74741C143.553 9.80948 143.526 9.87155 143.501 9.93363C143.491 9.95981 143.481 9.98503 143.47 10.0112C143.446 10.0752 143.422 10.1392 143.399 10.2042C143.389 10.2304 143.38 10.2556 143.372 10.2818C143.35 10.3478 143.328 10.4137 143.306 10.4797C143.298 10.5059 143.29 10.533 143.282 10.5592C143.262 10.6261 143.241 10.6931 143.223 10.76C143.215 10.7881 143.208 10.8162 143.201 10.8444C143.184 10.9113 143.165 10.9782 143.149 11.0461C143.142 11.0762 143.136 11.1072 143.129 11.1373C143.114 11.2032 143.1 11.2701 143.085 11.3371C143.078 11.37 143.073 11.404 143.066 11.4379C143.054 11.5029 143.042 11.5679 143.031 11.6338C143.025 11.6717 143.02 11.7095 143.013 11.7473C143.004 11.8094 142.994 11.8724 142.986 11.9355C142.98 11.9791 142.976 12.0228 142.971 12.0664C142.964 12.1256 142.957 12.1838 142.951 12.2439C142.946 12.2943 142.943 12.3448 142.938 12.3962C142.934 12.4495 142.929 12.5029 142.925 12.5572C142.921 12.6202 142.919 12.6852 142.916 12.7483C142.914 12.7909 142.911 12.8326 142.91 12.8753C142.907 12.983 142.905 13.0906 142.905 13.2002C142.905 18.5026 146.849 21.8837 153.824 21.8837C160.798 21.8837 164.742 18.5026 164.742 13.2002C164.742 13.0916 164.74 12.983 164.737 12.8753C164.736 12.8326 164.733 12.7909 164.731 12.7483L164.734 12.7492Z" fill="url(#paint4_linear_text)"/>
+                        <path d="M153.885 8.14902C156.798 8.14902 159.517 7.66602 161.821 6.83191C159.966 5.36447 157.265 4.53909 153.825 4.53909C150.385 4.53909 147.721 5.35283 145.866 6.80088C148.188 7.65341 150.937 8.14805 153.885 8.14805V8.14902Z" fill="url(#paint5_linear_text)"/>
+                        <path d="M75.3654 12.0994L73.5587 8.64173L71.6547 4.99785H62.2035L63.687 7.25964L56.3586 21.3599L63.919 18.1787L63.9423 18.169L65.1938 15.4601L64.9414 17.9585C66.4705 17.9585 67.9936 18.0574 69.5024 18.2514C71.53 18.5123 73.5303 18.9468 75.4779 19.5501C76.6149 19.9022 77.7336 20.3124 78.83 20.779L80.202 21.3628L75.3634 12.1013L75.3654 12.0994ZM65.4765 14.8578L66.123 13.4689L68.1212 9.16451L69.5044 12.1683L70.7427 14.8578H65.4765Z" fill="url(#paint6_linear_text)"/>
+                    </g>
+                    <defs>
+                        <linearGradient id="paint0_linear_text" x1="45.6082" y1="21.3832" x2="45.6082" y2="5.02016" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#0B3C49"/>
+                            <stop offset="0.31" stop-color="#0B3240"/>
+                            <stop offset="0.83" stop-color="#0E1928"/>
+                            <stop offset="0.99" stop-color="#0F1020"/>
+                        </linearGradient>
+                        <linearGradient id="paint1_linear_text" x1="96.5761" y1="21.3832" x2="96.5761" y2="2.70937e-06" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#0B3C49"/>
+                            <stop offset="0.31" stop-color="#0B3240"/>
+                            <stop offset="0.83" stop-color="#0E1928"/>
+                            <stop offset="0.99" stop-color="#0F1020"/>
+                        </linearGradient>
+                        <linearGradient id="paint2_linear_text" x1="127.464" y1="21.391" x2="127.464" y2="5.02792" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#0B3C49"/>
+                            <stop offset="0.31" stop-color="#0B3240"/>
+                            <stop offset="0.83" stop-color="#0E1928"/>
+                            <stop offset="0.99" stop-color="#0F1020"/>
+                        </linearGradient>
+                        <linearGradient id="paint3_linear_text" x1="179.597" y1="21.8846" x2="179.597" y2="4.47314" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#0B3C49"/>
+                            <stop offset="0.31" stop-color="#0B3240"/>
+                            <stop offset="0.83" stop-color="#0E1928"/>
+                            <stop offset="0.99" stop-color="#0F1020"/>
+                        </linearGradient>
+                        <linearGradient id="paint4_linear_text" x1="153.826" y1="21.8846" x2="153.826" y2="8.90166" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#0B3C49"/>
+                            <stop offset="0.31" stop-color="#0B3240"/>
+                            <stop offset="0.83" stop-color="#0E1928"/>
+                            <stop offset="0.99" stop-color="#0F1020"/>
+                        </linearGradient>
+                        <linearGradient id="paint5_linear_text" x1="153.843" y1="8.14902" x2="153.843" y2="4.54006" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#0B3C49"/>
+                            <stop offset="0.31" stop-color="#0B3240"/>
+                            <stop offset="0.83" stop-color="#0E1928"/>
+                            <stop offset="0.99" stop-color="#0F1020"/>
+                        </linearGradient>
+                        <linearGradient id="paint6_linear_text" x1="68.2813" y1="21.3609" x2="68.2813" y2="4.99688" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#0B3C49"/>
+                            <stop offset="0.31" stop-color="#0B3240"/>
+                            <stop offset="0.83" stop-color="#0E1928"/>
+                            <stop offset="0.99" stop-color="#0F1020"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+        </div>
+
+    <div class="search-container">
+        <i data-lucide="search" class="search-icon"></i>
+        <input type="text" class="search-input" placeholder="Pesquisar">
+    </div>
+
+    <!-- Botão de busca quando colapsado -->
+    <button class="search-button-collapsed">
+        <i data-lucide="search"></i>
+    </button>
+
+    <nav class="sidebar-nav">
+        <a href="./index.html" class="nav-item">
+            <i data-lucide="house" class="nav-icon"></i>
+            <span class="nav-text">Painel</span>
+        </a>
+
+        <div class="nav-group">
+            <button class="nav-item nav-dropdown">
+                <div class="nav-item-content">
+                    <i data-lucide="list" class="nav-icon"></i>
+                    <span class="nav-text">Cadastros</span>
+                </div>
+                <i data-lucide="chevron-down" class="dropdown-arrow"></i>
+            </button>
+            <div class="nav-submenu">
+                <div class="nav-subgroup">
+                    <button class="nav-subitem nav-subdropdown">
+                        <span>Pessoas e Empresas</span>
+                        <i data-lucide="chevron-down" class="subdropdown-arrow"></i>
+                    </button>
+                    <div class="nav-subsubmenu">
+                        <a href="./pessoas-empresas.html" class="nav-subsubitem">Pessoas e Empresas</a>
+                        <a href="./grupo-empresa.html" class="nav-subsubitem">Grupo de Empresa</a>
+                        <a href="#categoria" class="nav-subsubitem">Categoria</a>
+                        <a href="#setor" class="nav-subsubitem">Setor</a>
+                        <a href="#ramo" class="nav-subsubitem">Ramo</a>
+                    </div>
+                </div>
+
+                <div class="nav-subgroup">
+                    <button class="nav-subitem nav-subdropdown">
+                        <span>Produtos e Serviços</span>
+                        <i data-lucide="chevron-down" class="subdropdown-arrow"></i>
+                    </button>
+                    <div class="nav-subsubmenu">
+                        <a href="./produtos-servicos.html" class="nav-subsubitem">Produtos e Serviços</a>
+                        <a href="./classificacao.html" class="nav-subsubitem">Classificação</a>
+                        <a href="#unidades-medida" class="nav-subsubitem">Unidades de Medida</a>
+                        <a href="#complementares" class="nav-subsubitem">Complementares</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="#" class="nav-item">
+            <i data-lucide="chart-no-axes-combined" class="nav-icon"></i>
+            <span class="nav-text">BI e Relatórios</span>
+        </a>
+
+        <div class="nav-group active">
+            <button class="nav-item nav-dropdown">
+                <div class="nav-item-content">
+                    <i data-lucide="sprout" class="nav-icon"></i>
+                    <span class="nav-text">Estufas</span>
+                </div>
+                <i data-lucide="chevron-down" class="dropdown-arrow"></i>
+            </button>
+            <div class="nav-submenu">
+                <a href="#agenda-eventos" class="nav-subitem">Agenda de Eventos</a>
+                <a href="./pedidos.html" class="nav-subitem">Pedidos</a>
+                <a href="./ordens-producao.html" class="nav-subitem">Ordens de Produção</a>
+                <a href="./gestao-producao.html" class="nav-subitem active">Produção</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="user-profile-container">
+            <button class="user-profile" id="userProfileButton">
+                <div class="user-avatar">
+                    <img src="https://ui-avatars.com/api/?name=Irmãos+Ferreira&background=0068ab&color=fff&size=40&rounded=true" alt="Irmãos Ferreira">
+                </div>
+                <div class="user-info">
+                    <div class="user-name">Irmãos Ferreira</div>
+                    <div class="user-email">Estufa.I.F@gmail.com</div>
+                </div>
+                <i data-lucide="chevron-down" class="dropdown-arrow"></i>
+            </button>
+
+            <div class="user-dropdown" id="userDropdown">
+                <a href="#" class="user-dropdown-item">
+                    <i data-lucide="user" class="dropdown-item-icon"></i>
+                    <span>Conta</span>
+                </a>
+                <a href="#" class="user-dropdown-item">
+                    <i data-lucide="settings" class="dropdown-item-icon"></i>
+                    <span>Configurações</span>
+                </a>
+                <div class="user-dropdown-divider"></div>
+                <a href="./login.html" class="user-dropdown-item logout" data-logout>
+                    <i data-lucide="log-out" class="dropdown-item-icon"></i>
+                    <span>Sair</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Content -->
+        <div class="pedidos-container">
+            <!-- Topbar -->
+            <div class="pedidos-topbar">
+                <div class="breadcrumb">
+                    <a href="#" class="breadcrumb-item">
+                        <i data-lucide="layout-grid"></i>
+                        Painel
+                    </a>
+                    <i data-lucide="chevron-right" class="breadcrumb-separator"></i>
+                    <span class="breadcrumb-item">Estufas</span>
+                    <i data-lucide="chevron-right" class="breadcrumb-separator"></i>
+                    <span class="breadcrumb-item active">Produção</span>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button" title="Notificações">
+                        <i data-lucide="bell"></i>
+                    </button>
+                    <button class="icon-button" title="Configurações">
+                        <i data-lucide="settings"></i>
+                    </button>
+                    <button class="icon-button help-button">
+                        <i data-lucide="circle-help"></i>
+                        <span>Ajuda</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Header com Tabs -->
+            <div class="pedidos-header">
+                <div class="pedidos-tabs">
+                    <button class="pedidos-tab" onclick="window.location.href='#'">Agenda de Eventos</button>
+                    <button class="pedidos-tab" onclick="window.location.href='./pedidos.html'">Pedidos</button>
+                    <button class="pedidos-tab" onclick="window.location.href='./ordens-producao.html'">Ordens de Produção</button>
+                    <button class="pedidos-tab active">Produção</button>
+                </div>
+            </div>
+
+            <!-- Título e Controles -->
+            <div class="pedidos-title-bar">
+                <div class="title-left">
+                    <button class="btn-back">
+                        <i data-lucide="arrow-left"></i>
+                    </button>
+                    <h1 class="pedidos-title">Gestão da Produção</h1>
+                </div>
+
+                <div class="title-right">
+                    <div class="view-toggle">
+                        <button class="view-btn active" title="Visualização em grade" onclick="toggleView('kanban')">
+                            <i data-lucide="grid-2x2"></i>
+                        </button>
+                        <button class="view-btn" title="Visualização em lista" onclick="toggleView('lista')">
+                            <i data-lucide="list"></i>
+                        </button>
+                    </div>
+
+                    <button class="btn-filtros" onclick="abrirFiltrosDrawer()">
+                        <i data-lucide="sliders-horizontal"></i>
+                        <span>Filtros avançados</span>
+                        <span class="notification-badge">1</span>
+                    </button>
+
+                    <button class="btn-novo-pedido">
+                        <i data-lucide="plus"></i>
+                        <span>Nova produção</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filtros Ativos (Badges) -->
+            <div class="pedidos-active-filters">
+                <div class="filter-badge">
+                    Badge
+                    <button class="filter-badge-remove" title="Remover filtro">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+                <div class="filter-badge">
+                    Badge
+                    <button class="filter-badge-remove" title="Remover filtro">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+                <div class="filter-badge">
+                    Badge
+                    <button class="filter-badge-remove" title="Remover filtro">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Kanban Board -->
+            <div class="kanban-board" id="producaoKanban">
+                <!-- Coluna 1: Aguardando Semeio -->
+                <div class="kanban-column">
+                    <div class="kanban-column-header">
+                        <h3 class="kanban-column-title">Aguardando Semeio</h3>
+                        <span class="kanban-column-count">2</span>
+                    </div>
+                    <div class="kanban-column-cards">
+                        <!-- Card 1 -->
+                        <div class="op-card" data-status="aguardando-semeio" data-status-text="Aguardando Semeio">
+                            <div class="op-card-header">
+                                <span class="op-id">OP-2025-006</span>
+                                <span class="op-badge badge-urgente">Enxertia</span>
+                            </div>
+                            <div class="op-codigo">TG-45878</div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="user"></i>
+                                <span>Fazenda Sol Nascente</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Pedido: 14/01/2025</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="package"></i>
+                                <span>Tomate Cereja - Lote 123</span>
+                            </div>
+
+                            <div class="op-info-row op-quantidade">
+                                <span>Qtd: 5.000</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Início: 19/02/2025</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="op-card" data-status="aguardando-semeio" data-status-text="Aguardando Semeio">
+                            <div class="op-card-header">
+                                <span class="op-id">OP-2025-003</span>
+                                <span class="op-badge badge-urgente">Enxertia</span>
+                            </div>
+                            <div class="op-codigo">TG-45878</div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="user"></i>
+                                <span>Fazenda Sol Nascente</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Pedido: 14/01/2025</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="package"></i>
+                                <span>Tomate Cereja - Lote 123</span>
+                            </div>
+
+                            <div class="op-info-row op-quantidade">
+                                <span>Qtd: 5.000</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Início: 19/02/2025</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna 2: Semeio -->
+                <div class="kanban-column">
+                    <div class="kanban-column-header">
+                        <h3 class="kanban-column-title">Semeio</h3>
+                        <span class="kanban-column-count">2</span>
+                    </div>
+                    <div class="kanban-column-cards">
+                        <!-- Card 1 -->
+                        <div class="op-card" data-status="semeio" data-status-text="Semeio">
+                            <div class="op-card-header">
+                                <span class="op-id">OP-2025-006</span>
+                                <span class="op-badge badge-urgente">Enxertia</span>
+                            </div>
+                            <div class="op-codigo">TG-45878</div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="user"></i>
+                                <span>Fazenda Sol Nascente</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Pedido: 14/01/2025</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="package"></i>
+                                <span>Tomate Cereja - Lote 123</span>
+                            </div>
+
+                            <div class="op-info-row op-quantidade">
+                                <span>Qtd: 5.000</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Início: 19/02/2025</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="op-card" data-status="semeio" data-status-text="Semeio">
+                            <div class="op-card-header">
+                                <span class="op-id">OP-2025-006</span>
+                                <span class="op-badge badge-urgente">Enxertia</span>
+                            </div>
+                            <div class="op-codigo">TG-45878</div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="user"></i>
+                                <span>Fazenda Sol Nascente</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Pedido: 14/01/2025</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="package"></i>
+                                <span>Tomate Cereja - Lote 123</span>
+                            </div>
+
+                            <div class="op-info-row op-quantidade">
+                                <span>Qtd: 5.000</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Início: 19/02/2025</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna 3: Germinação -->
+                <div class="kanban-column">
+                    <div class="kanban-column-header">
+                        <h3 class="kanban-column-title">Germinação</h3>
+                        <span class="kanban-column-count">2</span>
+                    </div>
+                    <div class="kanban-column-cards">
+                        <!-- Card 1 -->
+                        <div class="op-card" data-status="germinacao" data-status-text="Germinação">
+                            <div class="op-card-header">
+                                <span class="op-id">OP-2025-006</span>
+                                <span class="op-badge badge-urgente">Enxertia</span>
+                            </div>
+                            <div class="op-codigo">TG-45878</div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="user"></i>
+                                <span>Fazenda Sol Nascente</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Pedido: 14/01/2025</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="package"></i>
+                                <span>Tomate Cereja - Lote 123</span>
+                            </div>
+
+                            <div class="op-info-row op-quantidade">
+                                <span>Qtd: 5.000</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Início: 19/02/2025</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="op-card" data-status="germinacao" data-status-text="Germinação">
+                            <div class="op-card-header">
+                                <span class="op-id">OP-2025-006</span>
+                                <span class="op-badge badge-urgente">Enxertia</span>
+                            </div>
+                            <div class="op-codigo">TG-45878</div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="user"></i>
+                                <span>Fazenda Sol Nascente</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Pedido: 14/01/2025</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="package"></i>
+                                <span>Tomate Cereja - Lote 123</span>
+                            </div>
+
+                            <div class="op-info-row op-quantidade">
+                                <span>Qtd: 5.000</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Início: 19/02/2025</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna 4: Casa de Vegetação -->
+                <div class="kanban-column">
+                    <div class="kanban-column-header">
+                        <h3 class="kanban-column-title">Casa de Vegetação</h3>
+                        <span class="kanban-column-count">2</span>
+                    </div>
+                    <div class="kanban-column-cards">
+                        <!-- Card 1 -->
+                        <div class="op-card" data-status="casa-vegetacao" data-status-text="Casa de Vegetação">
+                            <div class="op-card-header">
+                                <span class="op-id">OP-2025-006</span>
+                                <span class="op-badge badge-urgente">Enxertia</span>
+                            </div>
+                            <div class="op-codigo">TG-45878</div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="user"></i>
+                                <span>Fazenda Sol Nascente</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Pedido: 14/01/2025</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="package"></i>
+                                <span>Tomate Cereja - Lote 123</span>
+                            </div>
+
+                            <div class="op-info-row op-quantidade">
+                                <span>Qtd: 5.000</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Início: 19/02/2025</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="op-card" data-status="casa-vegetacao" data-status-text="Casa de Vegetação">
+                            <div class="op-card-header">
+                                <span class="op-id">OP-2025-006</span>
+                                <span class="op-badge badge-urgente">Enxertia</span>
+                            </div>
+                            <div class="op-codigo">TG-45878</div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="user"></i>
+                                <span>Fazenda Sol Nascente</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Pedido: 14/01/2025</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="package"></i>
+                                <span>Tomate Cereja - Lote 123</span>
+                            </div>
+
+                            <div class="op-info-row op-quantidade">
+                                <span>Qtd: 5.000</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Início: 19/02/2025</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna 5: Sala de Corte -->
+                <div class="kanban-column">
+                    <div class="kanban-column-header">
+                        <h3 class="kanban-column-title">Sala de Corte</h3>
+                        <span class="kanban-column-count">2</span>
+                    </div>
+                    <div class="kanban-column-cards">
+                        <!-- Card 1 -->
+                        <div class="op-card" data-status="sala-corte" data-status-text="Sala de Corte">
+                            <div class="op-card-header">
+                                <span class="op-id">OP-2025-006</span>
+                                <span class="op-badge badge-urgente">Enxertia</span>
+                            </div>
+                            <div class="op-codigo">TG-45878</div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="user"></i>
+                                <span>Fazenda Sol Nascente</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Pedido: 14/01/2025</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="package"></i>
+                                <span>Tomate Cereja - Lote 123</span>
+                            </div>
+
+                            <div class="op-info-row op-quantidade">
+                                <span>Qtd: 5.000</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Início: 19/02/2025</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="op-card" data-status="sala-corte" data-status-text="Sala de Corte">
+                            <div class="op-card-header">
+                                <span class="op-id">OP-2025-006</span>
+                                <span class="op-badge badge-urgente">Enxertia</span>
+                            </div>
+                            <div class="op-codigo">TG-45878</div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="user"></i>
+                                <span>Fazenda Sol Nascente</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Pedido: 14/01/2025</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="package"></i>
+                                <span>Tomate Cereja - Lote 123</span>
+                            </div>
+
+                            <div class="op-info-row op-quantidade">
+                                <span>Qtd: 5.000</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Início: 19/02/2025</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna 6: Sala de Fusão -->
+                <div class="kanban-column">
+                    <div class="kanban-column-header">
+                        <h3 class="kanban-column-title">Sala de Fusão</h3>
+                        <span class="kanban-column-count">2</span>
+                    </div>
+                    <div class="kanban-column-cards">
+                        <!-- Card 1 -->
+                        <div class="op-card" data-status="sala-fusao" data-status-text="Sala de Fusão">
+                            <div class="op-card-header">
+                                <span class="op-id">OP-2025-006</span>
+                                <span class="op-badge badge-urgente">Enxertia</span>
+                            </div>
+                            <div class="op-codigo">TG-45878</div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="user"></i>
+                                <span>Fazenda Sol Nascente</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Pedido: 14/01/2025</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="package"></i>
+                                <span>Tomate Cereja - Lote 123</span>
+                            </div>
+
+                            <div class="op-info-row op-quantidade">
+                                <span>Qtd: 5.000</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Início: 19/02/2025</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="op-card" data-status="sala-fusao" data-status-text="Sala de Fusão">
+                            <div class="op-card-header">
+                                <span class="op-id">OP-2025-006</span>
+                                <span class="op-badge badge-urgente">Enxertia</span>
+                            </div>
+                            <div class="op-codigo">TG-45878</div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="user"></i>
+                                <span>Fazenda Sol Nascente</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Pedido: 14/01/2025</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="package"></i>
+                                <span>Tomate Cereja - Lote 123</span>
+                            </div>
+
+                            <div class="op-info-row op-quantidade">
+                                <span>Qtd: 5.000</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Início: 19/02/2025</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna 7: Adaptação -->
+                <div class="kanban-column">
+                    <div class="kanban-column-header">
+                        <h3 class="kanban-column-title">Adaptação</h3>
+                        <span class="kanban-column-count">2</span>
+                    </div>
+                    <div class="kanban-column-cards">
+                        <!-- Card 1 -->
+                        <div class="op-card" data-status="adaptacao" data-status-text="Adaptação">
+                            <div class="op-card-header">
+                                <span class="op-id">OP-2025-006</span>
+                                <span class="op-badge badge-urgente">Enxertia</span>
+                            </div>
+                            <div class="op-codigo">TG-45878</div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="user"></i>
+                                <span>Fazenda Sol Nascente</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Pedido: 14/01/2025</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="package"></i>
+                                <span>Tomate Cereja - Lote 123</span>
+                            </div>
+
+                            <div class="op-info-row op-quantidade">
+                                <span>Qtd: 5.000</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Início: 19/02/2025</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="op-card" data-status="adaptacao" data-status-text="Adaptação">
+                            <div class="op-card-header">
+                                <span class="op-id">OP-2025-006</span>
+                                <span class="op-badge badge-urgente">Enxertia</span>
+                            </div>
+                            <div class="op-codigo">TG-45878</div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="user"></i>
+                                <span>Fazenda Sol Nascente</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Pedido: 14/01/2025</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="package"></i>
+                                <span>Tomate Cereja - Lote 123</span>
+                            </div>
+
+                            <div class="op-info-row op-quantidade">
+                                <span>Qtd: 5.000</span>
+                            </div>
+
+                            <div class="op-info-row">
+                                <i data-lucide="calendar"></i>
+                                <span>Início: 19/02/2025</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna 8: Cancelado -->
+                <div class="kanban-column">
+                    <div class="kanban-column-header">
+                        <h3 class="kanban-column-title">Cancelado</h3>
+                        <span class="kanban-column-count">0</span>
+                    </div>
+                    <div class="kanban-column-cards">
+                        <div class="kanban-empty-state">
+                            <i data-lucide="package-x"></i>
+                            <p>Não há ordens de produção</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Produções (oculta por padrão) -->
+            <div class="pedidos-lista" id="producaoLista" style="display: none;">
+                <div class="pedidos-lista-container">
+                    <table class="pedidos-table">
+                        <thead>
+                            <tr>
+                                <th>OP</th>
+                                <th>Código</th>
+                                <th>Fazenda</th>
+                                <th>Data Pedido</th>
+                                <th>Produto</th>
+                                <th>Quantidade</th>
+                                <th>Início</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="pedido-row">
+                                <td class="pedido-numero">OP-2025-006</td>
+                                <td>TG-45878</td>
+                                <td>Fazenda Sol Nascente</td>
+                                <td>14/01/2025</td>
+                                <td>Tomate Cereja - Lote 123</td>
+                                <td>5.000</td>
+                                <td>19/02/2025</td>
+                                <td><span class="status-tag status-aprovacao">Aguardando Semeio</span></td>
+                            </tr>
+                            <tr class="pedido-row">
+                                <td class="pedido-numero">OP-2025-005</td>
+                                <td>TG-45878</td>
+                                <td>Fazenda Sol Nascente</td>
+                                <td>14/01/2025</td>
+                                <td>Tomate Cereja - Lote 123</td>
+                                <td>5.000</td>
+                                <td>19/02/2025</td>
+                                <td><span class="status-tag status-producao">Semeio</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Drawer: Aguardando Semeio -->
+        <div class="drawer-overlay" id="aguardandoSemeioDrawer">
+            <div class="drawer-container">
+                <!-- Drawer Header -->
+                <div class="drawer-header">
+                    <div class="drawer-header-top">
+                        <div class="drawer-title-section">
+                            <h2 class="drawer-title">Aguardando Semeio</h2>
+                            <div class="drawer-subtitle">
+                                <span>OP-2025-006</span>
+                                <span class="drawer-subtitle-separator">•</span>
+                                <span>Fazenda Sol Nascente</span>
+                                <span class="drawer-subtitle-separator">•</span>
+                                <span>Enxertia</span>
+                            </div>
+                        </div>
+                        <div class="drawer-header-actions">
+                            <span class="drawer-status-badge">Faturado</span>
+                            <button class="drawer-close-btn" onclick="fecharAguardandoSemeioDrawer()">
+                                <i data-lucide="x"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drawer Content -->
+                <div class="drawer-content">
+                    <!-- Seção: Informações Gerais -->
+                    <div class="drawer-section">
+                        <div class="drawer-section-header">
+                            <i data-lucide="info" class="drawer-section-icon"></i>
+                            <h3 class="drawer-section-title">Informações Gerais</h3>
+                        </div>
+                        <div class="drawer-section-body">
+                            <div class="drawer-form-row">
+                                <div class="drawer-form-group">
+                                    <label class="drawer-form-label">Produto</label>
+                                    <div class="drawer-form-value">Muda de Eucalipto Clone AEC 144</div>
+                                </div>
+                                <div class="drawer-form-group">
+                                    <label class="drawer-form-label">Quantidade</label>
+                                    <div class="drawer-form-value">5.000</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção: Planejamento e Datas -->
+                    <div class="drawer-section">
+                        <div class="drawer-section-header">
+                            <i data-lucide="calendar" class="drawer-section-icon"></i>
+                            <h3 class="drawer-section-title">Planejamento e Datas</h3>
+                        </div>
+                        <div class="drawer-section-body">
+                            <div class="drawer-form-row">
+                                <div class="drawer-form-group">
+                                    <label class="drawer-form-label">Data Planejada para Semeio</label>
+                                    <input type="date" class="drawer-form-input" placeholder="00/00/0000">
+                                </div>
+                                <div class="drawer-form-group">
+                                    <label class="drawer-form-label">Data Estimada Entrega</label>
+                                    <input type="date" class="drawer-form-input" placeholder="00/00/0000">
+                                </div>
+                            </div>
+                            <div class="drawer-form-row">
+                                <div class="drawer-form-group">
+                                    <label class="drawer-form-label">Responsável Coleta</label>
+                                    <input type="text" class="drawer-form-input" value="João da Silva">
+                                </div>
+                                <div class="drawer-form-group">
+                                    <label class="drawer-form-label">Lote de Sementes Utilizado</label>
+                                    <input type="text" class="drawer-form-input" value="SEM-2024-001 - Lote A (Disp: 50kg)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botões de Ação -->
+                    <div class="drawer-action-buttons">
+                        <button class="drawer-action-btn">
+                            <i data-lucide="file-text" class="drawer-action-icon"></i>
+                            <span>Termo de Retirada</span>
+                        </button>
+                        <button class="drawer-action-btn">
+                            <i data-lucide="tag" class="drawer-action-icon"></i>
+                            <span>Etiquetas</span>
+                        </button>
+                    </div>
+
+                    <!-- Seção: Estimativas e Insumos -->
+                    <div class="drawer-section">
+                        <div class="drawer-section-header">
+                            <i data-lucide="package" class="drawer-section-icon"></i>
+                            <h3 class="drawer-section-title">Estimativas e Insumos</h3>
+                        </div>
+                        <div class="drawer-section-body">
+                            <!-- Estimativas -->
+                            <div class="drawer-estimativas">
+                                <div class="drawer-estimativa-card">
+                                    <div class="drawer-estimativa-label">Quantidade Total (Solicitada)</div>
+                                    <div class="drawer-estimativa-value">5.000</div>
+                                </div>
+                                <div class="drawer-estimativa-card highlight">
+                                    <div class="drawer-estimativa-label">Estimativa (+5% Germinação)</div>
+                                    <div class="drawer-estimativa-value">5.250</div>
+                                </div>
+                            </div>
+
+                            <!-- Tabela de Insumos -->
+                            <table class="drawer-table">
+                                <thead>
+                                    <tr>
+                                        <th>Insumo</th>
+                                        <th>Qtd. Necessária</th>
+                                        <th>Lote</th>
+                                        <th>Estoque</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Bandeja 128 células</td>
+                                        <td>42 un</td>
+                                        <td>BAN-001</td>
+                                        <td><span class="drawer-table-badge ok">OK (150 un)</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Substrato Carolina</td>
+                                        <td>5 sc</td>
+                                        <td>SUB-2024</td>
+                                        <td><span class="drawer-table-badge baixo">Baixo (0,8 L)</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Defensivo Inicial</td>
+                                        <td>0,5 L</td>
+                                        <td>SUB-2024</td>
+                                        <td><span class="drawer-table-badge baixo">Baixo (0,8 L)</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drawer Footer -->
+                <div class="drawer-footer">
+                    <button class="drawer-btn drawer-btn-secondary" onclick="fecharAguardandoSemeioDrawer()">
+                        Cancelar
+                    </button>
+                    <button class="drawer-btn drawer-btn-primary">
+                        <i data-lucide="play"></i>
+                        Iniciar Semeio
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Drawer: Semeio -->
+        <div class="drawer-overlay" id="semeioDrawer">
+            <div class="drawer-container">
+                <!-- Drawer Header -->
+                <div class="drawer-header">
+                    <div class="drawer-header-top">
+                        <div class="drawer-title-section">
+                            <h2 class="drawer-title">Semeio</h2>
+                            <div class="drawer-subtitle">
+                                <span>OP-2025-006</span>
+                                <span class="drawer-subtitle-separator">•</span>
+                                <span>Fazenda Sol Nascente</span>
+                                <span class="drawer-subtitle-separator">•</span>
+                                <span>Enxertia</span>
+                            </div>
+                        </div>
+                        <div class="drawer-header-actions">
+                            <span class="drawer-status-badge">Faturado</span>
+                            <button class="drawer-close-btn" onclick="fecharSemeioDrawer()">
+                                <i data-lucide="x"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drawer Content -->
+                <div class="drawer-content">
+                    <!-- Seção: Informações Gerais -->
+                    <div class="drawer-section">
+                        <div class="drawer-section-header">
+                            <i data-lucide="info" class="drawer-section-icon"></i>
+                            <h3 class="drawer-section-title">Informações Gerais</h3>
+                        </div>
+                        <div class="drawer-section-body">
+                            <div class="drawer-form-row">
+                                <div class="drawer-form-group">
+                                    <label class="drawer-form-label">Produto</label>
+                                    <div class="drawer-form-value">Muda de Eucalipto Clone AEC 144</div>
+                                </div>
+                                <div class="drawer-form-group">
+                                    <label class="drawer-form-label">Quantidade</label>
+                                    <div class="drawer-form-value">5.000</div>
+                                </div>
+                            </div>
+                            <div class="drawer-form-row">
+                                <div class="drawer-form-group">
+                                    <label class="drawer-form-label">Responsável Coleta</label>
+                                    <div class="drawer-form-value">João da Silva</div>
+                                </div>
+                                <div class="drawer-form-group">
+                                    <label class="drawer-form-label">Lote de Sementes</label>
+                                    <div class="drawer-form-value">SEM-2024-001 - Lote A (Disp: 50kg)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção: Monitoramento de Capacidade Diária -->
+                    <div class="drawer-section">
+                        <div class="drawer-section-header">
+                            <i data-lucide="activity" class="drawer-section-icon"></i>
+                            <h3 class="drawer-section-title">Monitoramento de Capacidade Diária</h3>
+                        </div>
+                        <div class="drawer-section-body">
+                            <div class="drawer-monitoring-cards">
+                                <div class="drawer-monitoring-card">
+                                    <div class="drawer-monitoring-label">Data Atual</div>
+                                    <div class="drawer-monitoring-value">15/01/2025</div>
+                                </div>
+                                <div class="drawer-monitoring-card">
+                                    <div class="drawer-monitoring-label">Capacidade Diária</div>
+                                    <div class="drawer-monitoring-value">100.000 un</div>
+                                </div>
+                                <div class="drawer-monitoring-card highlight-blue">
+                                    <div class="drawer-monitoring-label">Semeando Agora</div>
+                                    <div class="drawer-monitoring-value">5.000 un</div>
+                                </div>
+                                <div class="drawer-monitoring-card highlight-green">
+                                    <div class="drawer-monitoring-label">Restante Livre</div>
+                                    <div class="drawer-monitoring-value">50.000 un</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção: Execução de Semeio -->
+                    <div class="drawer-section">
+                        <div class="drawer-section-header">
+                            <i data-lucide="play-circle" class="drawer-section-icon"></i>
+                            <h3 class="drawer-section-title">Execução de Semeio</h3>
+                        </div>
+                        <div class="drawer-section-body">
+                            <!-- Toggle de Tipo de Semeio -->
+                            <div class="drawer-form-group" style="margin-bottom: 20px;">
+                                <label class="drawer-form-label">Tipo de Semeio</label>
+                                <div class="drawer-toggle-group">
+                                    <button class="drawer-toggle-btn active">Manual</button>
+                                    <button class="drawer-toggle-btn">Automático</button>
+                                </div>
+                            </div>
+
+                            <!-- Time Display -->
+                            <div class="drawer-time-display">
+                                <div class="drawer-time-main">
+                                    <i data-lucide="clock" class="drawer-time-icon"></i>
+                                    <div class="drawer-time-content">
+                                        <div class="drawer-time-label">Tempo Decorrido</div>
+                                        <div class="drawer-time-value">02:45:00</div>
+                                    </div>
+                                </div>
+                                <div class="drawer-time-extra">
+                                    <span class="drawer-time-badge">Em andamento</span>
+                                    <div class="drawer-time-info">Iniciado em 15/01/2025 às 08:30</div>
+                                </div>
+                            </div>
+
+                            <!-- Destino -->
+                            <div class="drawer-form-group">
+                                <label class="drawer-form-label">Destino</label>
+                                <select class="drawer-select">
+                                    <option value="" disabled selected>Selecione o destino</option>
+                                    <option value="baia-1">Baia de Germinação 1</option>
+                                    <option value="baia-2">Baia de Germinação 2</option>
+                                    <option value="baia-3">Baia de Germinação 3</option>
+                                </select>
+                            </div>
+
+                            <!-- Info Box: Apontamento de Insumos -->
+                            <div class="drawer-info-box">
+                                <i data-lucide="alert-circle" class="drawer-info-box-icon"></i>
+                                <div class="drawer-info-box-content">
+                                    <div class="drawer-info-box-text">
+                                        O apontamento de insumos utilizados será feito automaticamente ao concluir o semeio.
+                                    </div>
+                                    <div class="drawer-info-box-alert">
+                                        Certifique-se de que todos os insumos estão disponíveis antes de prosseguir.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drawer Footer -->
+                <div class="drawer-footer">
+                    <button class="drawer-btn drawer-btn-secondary" onclick="fecharSemeioDrawer()">
+                        Cancelar
+                    </button>
+                    <button class="drawer-btn drawer-btn-primary">
+                        <i data-lucide="check"></i>
+                        Concluir Semeio
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Drawer: Germinação -->
+        <div class="drawer-overlay" id="germinacaoDrawer">
+            <div class="drawer-container">
+                <!-- Drawer Header -->
+                <div class="drawer-header">
+                    <div class="drawer-header-top">
+                        <div class="drawer-title-section">
+                            <h2 class="drawer-title">Germinação</h2>
+                            <div class="drawer-subtitle">
+                                <span>OP-2025-006</span>
+                                <span class="drawer-subtitle-separator">•</span>
+                                <span>Fazenda Sol Nascente</span>
+                                <span class="drawer-subtitle-separator">•</span>
+                                <span>Enxertia</span>
+                            </div>
+                        </div>
+                        <div class="drawer-header-actions">
+                            <span class="drawer-status-badge">Faturado</span>
+                            <button class="drawer-close-btn" onclick="fecharGerminacaoDrawer()">
+                                <i data-lucide="x"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drawer Content -->
+                <div class="drawer-content">
+                    <!-- Seção: Informações Gerais -->
+                    <div class="drawer-section">
+                        <div class="drawer-section-header">
+                            <i data-lucide="info" class="drawer-section-icon"></i>
+                            <h3 class="drawer-section-title">Informações Gerais</h3>
+                        </div>
+                        <div class="drawer-section-body">
+                            <div class="drawer-form-row">
+                                <div class="drawer-form-group">
+                                    <label class="drawer-form-label">Produto</label>
+                                    <div class="drawer-form-value">Muda de Eucalipto Clone AEC 144</div>
+                                </div>
+                                <div class="drawer-form-group">
+                                    <label class="drawer-form-label">Quantidade</label>
+                                    <div class="drawer-form-value">5.000</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção Dupla: Localização e Tempo de Ciclo -->
+                    <div class="drawer-two-column-section">
+                        <!-- Localização e Capacidade -->
+                        <div class="drawer-section">
+                            <div class="drawer-section-header">
+                                <i data-lucide="map-pin" class="drawer-section-icon"></i>
+                                <h3 class="drawer-section-title">Localização e Capacidade</h3>
+                            </div>
+                            <div class="drawer-section-body">
+                                <!-- Baia Atual -->
+                                <div class="drawer-baia-status">
+                                    <span class="drawer-baia-indicator"></span>
+                                    <span class="drawer-baia-name">Baia 02</span>
+                                </div>
+
+                                <!-- Ocupação da Baia -->
+                                <div class="drawer-ocupacao-section">
+                                    <div class="drawer-ocupacao-header">
+                                        <span class="drawer-ocupacao-label">Ocupação da Baia</span>
+                                        <span class="drawer-ocupacao-value">85% Ocupada</span>
+                                    </div>
+                                    <div class="drawer-progress-bar">
+                                        <div class="drawer-progress-fill" style="width: 85%"></div>
+                                    </div>
+                                    <div class="drawer-ocupacao-warning">Capacidade Crítica: Planeje a saída</div>
+                                </div>
+
+                                <!-- Datas -->
+                                <div class="drawer-dates-section">
+                                    <div class="drawer-date-item">
+                                        <span class="drawer-date-label">Entrada</span>
+                                        <span class="drawer-date-value">12/01/2025, 09:00</span>
+                                    </div>
+                                    <div class="drawer-date-item">
+                                        <span class="drawer-date-label">Saída Prev.</span>
+                                        <span class="drawer-date-value">27/01/2025</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tempo de Ciclo -->
+                        <div class="drawer-section">
+                            <div class="drawer-section-header">
+                                <i data-lucide="clock" class="drawer-section-icon"></i>
+                                <h3 class="drawer-section-title">Tempo de Ciclo</h3>
+                            </div>
+                            <div class="drawer-section-body">
+                                <div class="drawer-cycle-chart">
+                                    <!-- Gráfico Circular -->
+                                    <div class="drawer-circular-progress">
+                                        <svg width="140" height="140" viewBox="0 0 140 140">
+                                            <circle class="drawer-circular-progress-bg" cx="70" cy="70" r="58"></circle>
+                                            <circle class="drawer-circular-progress-fill" cx="70" cy="70" r="58"
+                                                    stroke-dasharray="364" stroke-dashoffset="91"></circle>
+                                        </svg>
+                                        <div class="drawer-circular-progress-text">
+                                            <div class="drawer-cycle-days">336</div>
+                                            <div class="drawer-cycle-label">Dias Reais</div>
+                                        </div>
+                                    </div>
+                                    <div class="drawer-cycle-meta">Meta de Germinação: <strong>15 dias</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção: Performance e Resultados -->
+                    <div class="drawer-section">
+                        <div class="drawer-section-header">
+                            <i data-lucide="trending-up" class="drawer-section-icon"></i>
+                            <h3 class="drawer-section-title">Performance e Resultados</h3>
+                        </div>
+                        <div class="drawer-section-body">
+                            <!-- Cards de Performance -->
+                            <div class="drawer-performance-grid">
+                                <div class="drawer-performance-card">
+                                    <div class="drawer-performance-label">Qtd. Semeada</div>
+                                    <div class="drawer-performance-value">12.000</div>
+                                </div>
+                                <div class="drawer-performance-card">
+                                    <div class="drawer-performance-label">Qtd. Germinada (Real)</div>
+                                    <input type="text" class="drawer-performance-input" value="12.000" placeholder="Digite a quantidade">
+                                </div>
+                                <div class="drawer-performance-card drawer-performance-card-aproveitamento">
+                                    <div class="drawer-aproveitamento-text">APROVEITAMENTO: <span class="drawer-aproveitamento-value">98.5%</span></div>
+                                </div>
+                            </div>
+
+                            <!-- Perdas no Processo -->
+                            <div class="drawer-perdas-box">
+                                <div class="drawer-perdas-title">Perdas no Processo</div>
+                                <div class="drawer-perdas-text">Calculada: <strong>150 mudas</strong> (1.5%)</div>
+                            </div>
+
+                            <!-- Botão Laudo Técnico -->
+                            <button class="drawer-laudo-btn">
+                                <i data-lucide="file-text"></i>
+                                <span>Laudo Técnico de Germinação</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drawer Footer -->
+                <div class="drawer-footer">
+                    <button class="drawer-btn drawer-btn-secondary" onclick="fecharGerminacaoDrawer()">
+                        Cancelar
+                    </button>
+                    <button class="drawer-btn drawer-btn-primary">
+                        <i data-lucide="check"></i>
+                        Finalizar Germinação
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Drawer: Casa de Vegetação -->
+        <div class="drawer-overlay" id="casaVegetacaoDrawer">
+            <div class="drawer-container">
+                <!-- Drawer Header -->
+                <div class="drawer-header">
+                    <div class="drawer-header-top">
+                        <div class="drawer-title-section">
+                            <h2 class="drawer-title">Casa de Vegetação</h2>
+                            <div class="drawer-subtitle">
+                                <span>OP-2025-006</span>
+                                <span class="drawer-subtitle-separator">•</span>
+                                <span>Fazenda Sol Nascente</span>
+                                <span class="drawer-subtitle-separator">•</span>
+                                <span>Enxertia</span>
+                            </div>
+                        </div>
+                        <div class="drawer-header-actions">
+                            <span class="drawer-status-badge">Faturado</span>
+                            <button class="drawer-close-btn" onclick="fecharCasaVegetacaoDrawer()">
+                                <i data-lucide="x"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drawer Content -->
+                <div class="drawer-content">
+                    <!-- Seção: Informações Gerais -->
+                    <div class="drawer-section">
+                        <div class="drawer-section-header">
+                            <i data-lucide="info" class="drawer-section-icon"></i>
+                            <h3 class="drawer-section-title">Informações Gerais</h3>
+                        </div>
+                        <div class="drawer-section-body">
+                            <div class="drawer-form-row">
+                                <div class="drawer-form-group">
+                                    <label class="drawer-form-label">Produto</label>
+                                    <div class="drawer-form-value">Muda de Eucalipto Clone AEC 144</div>
+                                </div>
+                                <div class="drawer-form-group">
+                                    <label class="drawer-form-label">Quantidade</label>
+                                    <div class="drawer-form-value">5.000</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção: Rastreabilidade do Lote -->
+                    <div class="drawer-section">
+                        <div class="drawer-section-header">
+                            <i data-lucide="package" class="drawer-section-icon"></i>
+                            <h3 class="drawer-section-title">Rastreabilidade do Lote</h3>
+                        </div>
+                        <div class="drawer-section-body">
+                            <div class="drawer-rastreabilidade-grid">
+                                <!-- QR Code -->
+                                <div class="drawer-qrcode-section">
+                                    <div class="drawer-qrcode">
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=LT-2025-005" alt="QR Code LT-2025-005" style="width: 100%; height: 100%; object-fit: contain;">
+                                    </div>
+                                    <span class="drawer-qrcode-label">LT-2025-005</span>
+                                </div>
+
+                                <!-- Informações do Lote -->
+                                <div class="drawer-rastreabilidade-info">
+                                    <div class="drawer-rastreabilidade-item">
+                                        <span class="drawer-rastreabilidade-label">Cliente</span>
+                                        <span class="drawer-rastreabilidade-value">Fazenda Santa Maria</span>
+                                    </div>
+                                    <div class="drawer-rastreabilidade-item">
+                                        <span class="drawer-rastreabilidade-label">Cronograma</span>
+                                        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                                            <div style="display: flex; flex-direction: column; gap: 2px;">
+                                                <span style="font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; color: #9CA3AF;">Semeio:</span>
+                                                <span style="font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; font-weight: 600; color: #18191A;">15/01/2025</span>
+                                            </div>
+                                            <div style="display: flex; flex-direction: column; gap: 2px;">
+                                                <span style="font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; color: #9CA3AF;">Pronta em:</span>
+                                                <span style="font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; font-weight: 600; color: #10B981;">25/02/2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="drawer-rastreabilidade-item">
+                                        <span class="drawer-rastreabilidade-label">Quantidade Mudas</span>
+                                        <span class="drawer-rastreabilidade-value">12.000 un</span>
+                                    </div>
+                                    <div class="drawer-rastreabilidade-item">
+                                        <span class="drawer-rastreabilidade-label">Tipo de Muda</span>
+                                        <span class="drawer-rastreabilidade-value">Pé Franco</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção: Estufa e Localização -->
+                    <div class="drawer-section">
+                        <div class="drawer-section-header">
+                            <i data-lucide="warehouse" class="drawer-section-icon"></i>
+                            <h3 class="drawer-section-title">Estufa e Localização</h3>
+                        </div>
+                        <div class="drawer-section-body">
+                            <!-- Header com estatísticas -->
+                            <div class="drawer-estufa-header">
+                                <div class="drawer-estufa-stat">
+                                    <span class="drawer-estufa-stat-dot total"></span>
+                                    <span>Total: 5.000 un</span>
+                                </div>
+                                <span class="drawer-estufa-stat-separator">•</span>
+                                <div class="drawer-estufa-stat">
+                                    <span class="drawer-estufa-stat-dot ocupada"></span>
+                                    <span>Ocupada: 3.200 un</span>
+                                </div>
+                                <span class="drawer-estufa-stat-separator">•</span>
+                                <div class="drawer-estufa-stat">
+                                    <span class="drawer-estufa-stat-dot livre"></span>
+                                    <span>Livre: 1.800 un</span>
+                                </div>
+                            </div>
+
+                            <!-- Grid com Endereço e Status -->
+                            <div class="drawer-estufa-grid">
+                                <!-- Endereço Atual -->
+                                <div class="drawer-endereco-atual">
+                                    <div class="drawer-endereco-title">Endereço Atual</div>
+                                    <div class="drawer-endereco-grid">
+                                        <div class="drawer-endereco-item">
+                                            <span class="drawer-endereco-label">Estufa</span>
+                                            <span class="drawer-endereco-value">E-04</span>
+                                        </div>
+                                        <div class="drawer-endereco-item">
+                                            <span class="drawer-endereco-label">Rua</span>
+                                            <span class="drawer-endereco-value">R-02</span>
+                                        </div>
+                                        <div class="drawer-endereco-item">
+                                            <span class="drawer-endereco-label">Prateleira</span>
+                                            <span class="drawer-endereco-value">P-05</span>
+                                        </div>
+                                        <div class="drawer-endereco-item">
+                                            <span class="drawer-endereco-label">Bloco</span>
+                                            <span class="drawer-endereco-value">B-A</span>
+                                        </div>
+                                    </div>
+                                    <div class="drawer-localizacao-confirm">Localização confirmada em tempo real</div>
+                                </div>
+
+                                <!-- Status do Local -->
+                                <div class="drawer-status-local">
+                                    <div class="drawer-status-title">Status do Local</div>
+
+                                    <div class="drawer-status-card operacional">
+                                        <div class="drawer-status-header">
+                                            <span class="drawer-status-name">Operacional</span>
+                                            <span class="drawer-status-badge">Liberado</span>
+                                        </div>
+                                        <div class="drawer-status-description">Local higienizado e pronto para alocação</div>
+                                    </div>
+
+                                    <div class="drawer-status-card em-limpeza">
+                                        <div class="drawer-status-header">
+                                            <span class="drawer-status-name">Em Limpeza</span>
+                                            <span class="drawer-status-badge">Bloqueado</span>
+                                        </div>
+                                        <div class="drawer-status-description">Próxima manutenção programada: 28/02</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção: Registro de Insumos -->
+                    <div class="drawer-section">
+                        <div class="drawer-section-header">
+                            <i data-lucide="flask-conical" class="drawer-section-icon"></i>
+                            <h3 class="drawer-section-title">Registro de Insumos</h3>
+                        </div>
+                        <div class="drawer-section-body">
+                            <div class="drawer-insumos-header">
+                                <button class="drawer-adicionar-btn">Adicionar</button>
+                            </div>
+
+                            <div class="drawer-insumos-list">
+                                <div class="drawer-insumo-item">
+                                    <span class="drawer-insumo-name">Adubo Foliar X</span>
+                                    <span class="drawer-insumo-quantidade">0.5 L</span>
+                                </div>
+                                <div class="drawer-insumo-item">
+                                    <span class="drawer-insumo-name">Defensivo Y</span>
+                                    <span class="drawer-insumo-quantidade">0.2 L</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drawer Footer -->
+                <div class="drawer-footer">
+                    <button class="drawer-btn drawer-btn-secondary" onclick="fecharCasaVegetacaoDrawer()">
+                        Cancelar
+                    </button>
+                    <button class="drawer-btn drawer-btn-primary">
+                        <i data-lucide="truck"></i>
+                        Liberar para Expedição
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- DRAWER: SALA DE CORTE -->
+        <div class="drawer-overlay" id="salaCorteDrawer">
+            <div class="drawer-container">
+                <!-- Header -->
+                <div class="drawer-header">
+                    <div class="drawer-header-top">
+                        <div class="drawer-title-section">
+                            <h2 class="drawer-title">Sala de Corte</h2>
+                            <p class="drawer-subtitle">
+                                <span style="color: #0068AB; font-weight: 600; cursor: pointer;">OP-2025-006</span>
+                                <span class="drawer-subtitle-separator">•</span>
+                                <span>Fazenda Sol Nascente</span>
+                                <span class="drawer-subtitle-separator">•</span>
+                                <span>Emartia</span>
+                            </p>
+                        </div>
+                        <div class="drawer-header-actions">
+                            <span class="drawer-status-badge" style="background: #D1FAE5; color: #065F46;">Faturado</span>
+                            <button class="drawer-close-btn" onclick="fecharSalaCorteDrawer()">
+                                <i data-lucide="x"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="drawer-content">
+                    <!-- Seção: Informações Gerais -->
+                    <div class="drawer-section">
+                        <div class="drawer-section-header">
+                            <i data-lucide="file-text" class="drawer-section-icon"></i>
+                            <h3 class="drawer-section-title">Informações Gerais</h3>
+                        </div>
+                        <div class="drawer-section-body">
+                            <div class="drawer-produto-info">
+                                <div class="drawer-produto-item">
+                                    <span class="drawer-produto-label">Produto</span>
+                                    <span class="drawer-produto-value">Muda de Eucalipto Clone AEC 144</span>
+                                </div>
+                                <div class="drawer-produto-item">
+                                    <span class="drawer-produto-label">Quantidade</span>
+                                    <span class="drawer-produto-value">5.000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção: Execução do Corte -->
+                    <div class="drawer-section">
+                        <div class="drawer-section-header">
+                            <i data-lucide="scissors" class="drawer-section-icon"></i>
+                            <h3 class="drawer-section-title">Execução do Corte</h3>
+                        </div>
+                        <div class="drawer-section-body">
+                            <div class="drawer-execucao-grid">
+                                <div class="drawer-form-group">
+                                    <label class="drawer-form-label">Operador Responsável</label>
+                                    <select class="drawer-select">
+                                        <option selected>Maria Silva (Líder)</option>
+                                        <option>João Santos</option>
+                                        <option>Ana Costa</option>
+                                    </select>
+                                </div>
+                                <div class="drawer-form-group">
+                                    <label class="drawer-form-label">Data do Corte</label>
+                                    <input type="date" class="drawer-date-input" placeholder="00/00/0000">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção: Controle por Bandeja -->
+                    <div class="drawer-section">
+                        <div class="drawer-section-header">
+                            <i data-lucide="grid-3x3" class="drawer-section-icon"></i>
+                            <h3 class="drawer-section-title">Controle por Bandeja</h3>
+                        </div>
+                        <div class="drawer-section-body">
+                            <div class="drawer-bandeja-header">
+                                <span class="drawer-bandeja-title">Controle por Bandeja</span>
+                                <span class="drawer-bandeja-total">Total: 28 bandejas</span>
+                            </div>
+                            <div class="drawer-bandeja-list">
+                                <div class="drawer-bandeja-item">
+                                    <span class="drawer-bandeja-number">#01</span>
+                                    <span class="drawer-bandeja-name">Bandeja 128 cel</span>
+                                    <select class="drawer-bandeja-select">
+                                        <option selected>OP - Anna</option>
+                                        <option>OP - João</option>
+                                        <option>OP - Maria</option>
+                                    </select>
+                                </div>
+                                <div class="drawer-bandeja-item">
+                                    <span class="drawer-bandeja-number">#01</span>
+                                    <span class="drawer-bandeja-name">Bandeja 128 cel</span>
+                                    <select class="drawer-bandeja-select">
+                                        <option selected>OP - Anna</option>
+                                        <option>OP - João</option>
+                                        <option>OP - Maria</option>
+                                    </select>
+                                </div>
+                                <div class="drawer-bandeja-item">
+                                    <span class="drawer-bandeja-number">#01</span>
+                                    <span class="drawer-bandeja-name">Bandeja 128 cel</span>
+                                    <select class="drawer-bandeja-select">
+                                        <option selected>OP - Anna</option>
+                                        <option>OP - João</option>
+                                        <option>OP - Maria</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção: Perdas no Corte -->
+                    <div class="drawer-section">
+                        <div class="drawer-section-header">
+                            <i data-lucide="alert-circle" class="drawer-section-icon"></i>
+                            <h3 class="drawer-section-title">Perdas no Corte</h3>
+                        </div>
+                        <div class="drawer-section-body">
+                            <div class="drawer-perdas-grid">
+                                <div class="drawer-perdas-item">
+                                    <span class="drawer-perdas-label">Sementes/Mudas descartadas durante o processo.</span>
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <input type="number" id="perdasCorteInput" class="drawer-perdas-input" value="0" min="0" oninput="calcularImpactoFinanceiro()">
+                                        <span style="font-family: 'Archivo', -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #61666A;">Un</span>
+                                    </div>
+                                </div>
+                                <div class="drawer-perdas-impacto">
+                                    <span class="drawer-perdas-impacto-label">Impacto Financeiro</span>
+                                    <span class="drawer-perdas-impacto-value" id="impactoFinanceiroValue">R$ 0,00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção: Destino a Previsão -->
+                    <div class="drawer-section">
+                        <div class="drawer-section-header">
+                            <i data-lucide="map-pin" class="drawer-section-icon"></i>
+                            <h3 class="drawer-section-title">Destino a Previsão</h3>
+                        </div>
+                        <div class="drawer-section-body">
+                            <div>
+                                <label class="drawer-destino-label">Localização Pós-Corte (Fusão)</label>
+                                <select class="drawer-destino-select">
+                                    <option selected>Câmara de Fusão 01 (Livre)</option>
+                                    <option>Câmara de Fusão 02 (Livre)</option>
+                                    <option>Câmara de Fusão 03 (Ocupada)</option>
+                                </select>
+                            </div>
+                            <div class="drawer-previsao-grid">
+                                <div class="drawer-form-group">
+                                    <label class="drawer-form-label">Previsão Seleção</label>
+                                    <input type="date" class="drawer-date-input" placeholder="00/00/0000">
+                                </div>
+                                <div class="drawer-form-group">
+                                    <label class="drawer-form-label">Dias em Fusão</label>
+                                    <select class="drawer-select">
+                                        <option selected>5 dias</option>
+                                        <option>3 dias</option>
+                                        <option>7 dias</option>
+                                        <option>10 dias</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="drawer-footer">
+                    <button class="drawer-btn drawer-btn-secondary" onclick="fecharSalaCorteDrawer()">
+                        Cancelar
+                    </button>
+                    <button class="drawer-btn drawer-btn-primary">
+                        Mover para Fusão
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- DRAWER: SALA DE FUSÃO -->
+        <div class="drawer-overlay" id="salaFusaoDrawer">
+            <div class="drawer-container">
+                <!-- Header -->
+                <div class="drawer-header">
+                    <div class="drawer-header-top">
+                        <div class="drawer-title-section">
+                            <h2 class="drawer-title">Sala de Fusão</h2>
+                            <p class="drawer-subtitle">
+                                <span style="color: #0068AB; font-weight: 600; cursor: pointer;">OP-2025-006</span>
+                                <span class="drawer-subtitle-separator">•</span>
+                                <span>Fazenda Sol Nascente</span>
+                                <span class="drawer-subtitle-separator">•</span>
+                                <span>Emartia</span>
+                            </p>
+                        </div>
+                        <div class="drawer-header-actions">
+                            <span class="drawer-status-badge" style="background: #D1FAE5; color: #065F46;">Faturado</span>
+                            <button class="drawer-close-btn" onclick="fecharSalaFusaoDrawer()">
+                                <i data-lucide="x"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="drawer-content">
+                    <!-- Seção: Informações Gerais -->
+                    <div class="drawer-section">
+                        <div class="drawer-section-header">
+                            <i data-lucide="file-text" class="drawer-section-icon"></i>
+                            <h3 class="drawer-section-title">Informações Gerais</h3>
+                        </div>
+                        <div class="drawer-section-body">
+                            <div class="drawer-produto-info">
+                                <div class="drawer-produto-item">
+                                    <span class="drawer-produto-label">Produto</span>
+                                    <span class="drawer-produto-value">Muda de Eucalipto Clone AEC 144</span>
+                                </div>
+                                <div class="drawer-produto-item">
+                                    <span class="drawer-produto-label">Quantidade</span>
+                                    <span class="drawer-produto-value">5.000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sala de Fusão (Cicatrização) -->
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="font-family: 'Archivo', -apple-system, sans-serif; font-size: 15px; font-weight: 700; color: #18191A; margin: 0 0 12px 0;">Sala de Fusão (Cicatrização)</h4>
+                        <div class="drawer-fusao-info">
+                            <div class="drawer-fusao-item">
+                                <span class="drawer-fusao-label">Lote</span>
+                                <span class="drawer-fusao-value">LT-2025-002</span>
+                            </div>
+                            <div class="drawer-fusao-item">
+                                <span class="drawer-fusao-label">Quantidade</span>
+                                <span class="drawer-fusao-value">5.000</span>
+                            </div>
+                            <div class="drawer-fusao-item">
+                                <span class="drawer-fusao-label">Data Enxerto (Início)</span>
+                                <span class="drawer-fusao-value">14/01/2025, 08:00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Destino: Adaptação -->
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="font-family: 'Archivo', -apple-system, sans-serif; font-size: 15px; font-weight: 700; color: #18191A; margin: 0 0 16px 0;">Destino: Adaptação</h4>
+
+                        <!-- Timeline -->
+                        <div class="drawer-timeline">
+                            <div class="drawer-timeline-point">
+                                <div class="drawer-timeline-icon">
+                                    <i data-lucide="calendar"></i>
+                                </div>
+                                <div class="drawer-timeline-date">15/01</div>
+                                <div class="drawer-timeline-weekday">Quarta-feira</div>
+                            </div>
+
+                            <div class="drawer-timeline-center">
+                                <div class="drawer-timeline-days">3</div>
+                                <div class="drawer-timeline-label">Dias Corridos</div>
+                            </div>
+
+                            <div class="drawer-timeline-point">
+                                <div class="drawer-timeline-icon">
+                                    <i data-lucide="calendar-check"></i>
+                                </div>
+                                <div class="drawer-timeline-date">20/01</div>
+                                <div class="drawer-timeline-weekday">Segunda-feira</div>
+                            </div>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="drawer-fusao-progress">
+                            <div class="drawer-fusao-progress-header">
+                                <span class="drawer-fusao-progress-label">Progresso Atual: 60%</span>
+                                <span class="drawer-fusao-progress-label">Meta: 5 dias</span>
+                            </div>
+                            <div class="drawer-fusao-progress-bar">
+                                <div class="drawer-fusao-progress-fill" style="width: 60%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Localização Atual -->
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="font-family: 'Archivo', -apple-system, sans-serif; font-size: 15px; font-weight: 700; color: #18191A; margin: 0 0 12px 0;">Localização Atual</h4>
+                        <div class="drawer-localizacao-box">
+                            <div class="drawer-localizacao-icon">
+                                <i data-lucide="warehouse"></i>
+                            </div>
+                            <div class="drawer-localizacao-content">
+                                <div class="drawer-localizacao-title">Câmara de Fusão</div>
+                                <div class="drawer-localizacao-name">Câmara 01 - Bloco B</div>
+                                <div class="drawer-localizacao-status">Localização confirmada</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Destino: Adaptação -->
+                    <div>
+                        <h4 class="drawer-destino-section-title">Destino: Adaptação</h4>
+                        <div class="drawer-destino-field">
+                            <label class="drawer-destino-field-label">Definir Localização na Adaptação</label>
+                            <select class="drawer-destino-select">
+                                <option value="" selected>Selecione o local de destino...</option>
+                                <option value="sala-01">Sala de Adaptação 01</option>
+                                <option value="sala-02">Sala de Adaptação 02</option>
+                                <option value="sala-03">Sala de Adaptação 03</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="drawer-footer">
+                    <button class="drawer-btn drawer-btn-secondary" onclick="fecharSalaFusaoDrawer()">
+                        Cancelar
+                    </button>
+                    <button class="drawer-btn drawer-btn-primary">
+                        Concluir Fusão
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Sidebar Menu Script -->
+    <script src="scripts/sidebar-menu.js"></script>
+
+    <!-- Authentication Script -->
+    <script src="scripts/auth.js"></script>
+
+    <script>
+        // Abrir drawer de filtros
+        function abrirFiltrosDrawer() {
+            const drawer = document.getElementById('filtrosDrawer');
+            if (drawer) {
+                drawer.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+
+                // Reinicializar ícones do Lucide
+                setTimeout(() => {
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                }, 100);
+            }
+        }
+
+        // Fechar drawer de filtros
+        function fecharFiltrosDrawer() {
+            const drawer = document.getElementById('filtrosDrawer');
+            if (drawer) {
+                drawer.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Fechar drawer ao clicar no overlay
+        document.addEventListener('click', function(e) {
+            const drawer = document.getElementById('filtrosDrawer');
+            if (drawer && e.target === drawer) {
+                fecharFiltrosDrawer();
+            }
+        });
+
+        // Remove filter badge
+        const filterRemoveBtns = document.querySelectorAll('.filter-badge-remove');
+        filterRemoveBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                btn.closest('.filter-badge').remove();
+            });
+        });
+
+        // ========================================
+        // DRAWER: AGUARDANDO SEMEIO
+        // ========================================
+
+        // Abrir drawer ao clicar em cards "Aguardando Semeio"
+        function abrirAguardandoSemeioDrawer() {
+            const drawer = document.getElementById('aguardandoSemeioDrawer');
+            if (drawer) {
+                drawer.classList.add('open');
+                document.body.style.overflow = 'hidden';
+
+                // Reinicializar ícones do Lucide
+                setTimeout(() => {
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                }, 100);
+            }
+        }
+
+        // Fechar drawer
+        function fecharAguardandoSemeioDrawer() {
+            const drawer = document.getElementById('aguardandoSemeioDrawer');
+            if (drawer) {
+                drawer.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Adicionar evento de click aos cards "Aguardando Semeio"
+        document.addEventListener('DOMContentLoaded', function() {
+            // Selecionar todos os cards com status "aguardando-semeio"
+            const aguardandoSemeioCards = document.querySelectorAll('.op-card[data-status="aguardando-semeio"]');
+            aguardandoSemeioCards.forEach(card => {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', function() {
+                    abrirAguardandoSemeioDrawer();
+                });
+            });
+
+            // Fechar drawer ao clicar no overlay (fora do drawer)
+            const drawer = document.getElementById('aguardandoSemeioDrawer');
+            if (drawer) {
+                drawer.addEventListener('click', function(e) {
+                    if (e.target === drawer) {
+                        fecharAguardandoSemeioDrawer();
+                    }
+                });
+            }
+
+            // ========================================
+            // DRAWER: ACTION BUTTONS
+            // ========================================
+            const termoRetiradaBtn = document.querySelector('.drawer-action-btn:nth-child(1)');
+            const etiquetasBtn = document.querySelector('.drawer-action-btn:nth-child(2)');
+
+            if (termoRetiradaBtn) {
+                termoRetiradaBtn.addEventListener('click', function() {
+                    // Funcionalidade do Termo de Retirada
+                    console.log('Termo de Retirada clicado');
+                    // TODO: Implementar funcionalidade
+                });
+            }
+
+            if (etiquetasBtn) {
+                etiquetasBtn.addEventListener('click', function() {
+                    // Funcionalidade de Etiquetas
+                    console.log('Etiquetas clicado');
+                    // TODO: Implementar funcionalidade
+                });
+            }
+
+            // ========================================
+            // DRAWER: TABS
+            // ========================================
+            const drawerTabs = document.querySelectorAll('.drawer-tab');
+            drawerTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remover active de todas as tabs
+                    drawerTabs.forEach(t => t.classList.remove('active'));
+                    // Adicionar active na tab clicada
+                    this.classList.add('active');
+
+                    // Reinicializar ícones
+                    setTimeout(() => {
+                        if (typeof lucide !== 'undefined') {
+                            lucide.createIcons();
+                        }
+                    }, 50);
+                });
+            });
+
+            // ========================================
+            // DRAWER: SEMEIO
+            // ========================================
+
+            // Selecionar todos os cards com status "semeio"
+            const semeioCards = document.querySelectorAll('.op-card[data-status="semeio"]');
+            semeioCards.forEach(card => {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', function() {
+                    abrirSemeioDrawer();
+                });
+            });
+
+            // Fechar drawer ao clicar no overlay (fora do drawer)
+            const semeioDrawer = document.getElementById('semeioDrawer');
+            if (semeioDrawer) {
+                semeioDrawer.addEventListener('click', function(e) {
+                    if (e.target === semeioDrawer) {
+                        fecharSemeioDrawer();
+                    }
+                });
+            }
+
+            // ========================================
+            // DRAWER SEMEIO: TOGGLE BUTTONS
+            // ========================================
+            const toggleButtons = document.querySelectorAll('.drawer-toggle-btn');
+            toggleButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remover active de todos os botões
+                    toggleButtons.forEach(b => b.classList.remove('active'));
+                    // Adicionar active no botão clicado
+                    this.classList.add('active');
+                });
+            });
+
+            // ========================================
+            // DRAWER: GERMINAÇÃO
+            // ========================================
+
+            // Selecionar todos os cards com status "germinacao"
+            const germinacaoCards = document.querySelectorAll('.op-card[data-status="germinacao"]');
+            germinacaoCards.forEach(card => {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', function() {
+                    abrirGerminacaoDrawer();
+                });
+            });
+
+            // Fechar drawer ao clicar no overlay (fora do drawer)
+            const germinacaoDrawer = document.getElementById('germinacaoDrawer');
+            if (germinacaoDrawer) {
+                germinacaoDrawer.addEventListener('click', function(e) {
+                    if (e.target === germinacaoDrawer) {
+                        fecharGerminacaoDrawer();
+                    }
+                });
+            }
+
+            // ========================================
+            // DRAWER: CASA DE VEGETAÇÃO
+            // ========================================
+
+            // Selecionar todos os cards com status "casa-vegetacao"
+            const casaVegetacaoCards = document.querySelectorAll('.op-card[data-status="casa-vegetacao"]');
+            casaVegetacaoCards.forEach(card => {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', function() {
+                    abrirCasaVegetacaoDrawer();
+                });
+            });
+
+            // Fechar drawer ao clicar no overlay (fora do drawer)
+            const casaVegetacaoDrawer = document.getElementById('casaVegetacaoDrawer');
+            if (casaVegetacaoDrawer) {
+                casaVegetacaoDrawer.addEventListener('click', function(e) {
+                    if (e.target === casaVegetacaoDrawer) {
+                        fecharCasaVegetacaoDrawer();
+                    }
+                });
+            }
+
+            // ========================================
+            // DRAWER: SALA DE CORTE
+            // ========================================
+
+            // Selecionar todos os cards com status "sala-corte"
+            const salaCorteCards = document.querySelectorAll('.op-card[data-status="sala-corte"]');
+            salaCorteCards.forEach(card => {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', function() {
+                    abrirSalaCorteDrawer();
+                });
+            });
+
+            // Fechar drawer ao clicar no overlay (fora do drawer)
+            const salaCorteDrawer = document.getElementById('salaCorteDrawer');
+            if (salaCorteDrawer) {
+                salaCorteDrawer.addEventListener('click', function(e) {
+                    if (e.target === salaCorteDrawer) {
+                        fecharSalaCorteDrawer();
+                    }
+                });
+            }
+
+            // ========================================
+            // DRAWER: SALA DE FUSÃO
+            // ========================================
+
+            // Selecionar todos os cards com status "sala-fusao"
+            const salaFusaoCards = document.querySelectorAll('.op-card[data-status="sala-fusao"]');
+            salaFusaoCards.forEach(card => {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', function() {
+                    abrirSalaFusaoDrawer();
+                });
+            });
+
+            // Fechar drawer ao clicar no overlay (fora do drawer)
+            const salaFusaoDrawer = document.getElementById('salaFusaoDrawer');
+            if (salaFusaoDrawer) {
+                salaFusaoDrawer.addEventListener('click', function(e) {
+                    if (e.target === salaFusaoDrawer) {
+                        fecharSalaFusaoDrawer();
+                    }
+                });
+            }
+        });
+
+        // ========================================
+        // FUNÇÕES: DRAWER SEMEIO
+        // ========================================
+
+        // Abrir drawer ao clicar em cards "Semeio"
+        function abrirSemeioDrawer() {
+            const drawer = document.getElementById('semeioDrawer');
+            if (drawer) {
+                drawer.classList.add('open');
+                document.body.style.overflow = 'hidden';
+
+                // Reinicializar ícones do Lucide
+                setTimeout(() => {
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                }, 100);
+            }
+        }
+
+        // Fechar drawer
+        function fecharSemeioDrawer() {
+            const drawer = document.getElementById('semeioDrawer');
+            if (drawer) {
+                drawer.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // ========================================
+        // FUNÇÕES: DRAWER GERMINAÇÃO
+        // ========================================
+
+        // Abrir drawer ao clicar em cards "Germinação"
+        function abrirGerminacaoDrawer() {
+            const drawer = document.getElementById('germinacaoDrawer');
+            if (drawer) {
+                drawer.classList.add('open');
+                document.body.style.overflow = 'hidden';
+
+                // Reinicializar ícones do Lucide
+                setTimeout(() => {
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                }, 100);
+            }
+        }
+
+        // Fechar drawer
+        function fecharGerminacaoDrawer() {
+            const drawer = document.getElementById('germinacaoDrawer');
+            if (drawer) {
+                drawer.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // ========================================
+        // FUNÇÕES: DRAWER CASA DE VEGETAÇÃO
+        // ========================================
+
+        // Abrir drawer ao clicar em cards "Casa de Vegetação"
+        function abrirCasaVegetacaoDrawer() {
+            const drawer = document.getElementById('casaVegetacaoDrawer');
+            if (drawer) {
+                drawer.classList.add('open');
+                document.body.style.overflow = 'hidden';
+
+                // Reinicializar ícones do Lucide
+                setTimeout(() => {
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                }, 100);
+            }
+        }
+
+        // Fechar drawer
+        function fecharCasaVegetacaoDrawer() {
+            const drawer = document.getElementById('casaVegetacaoDrawer');
+            if (drawer) {
+                drawer.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // ========================================
+        // FUNÇÕES: DRAWER SALA DE CORTE
+        // ========================================
+
+        // Abrir drawer ao clicar em cards "Sala de Corte"
+        function abrirSalaCorteDrawer() {
+            const drawer = document.getElementById('salaCorteDrawer');
+            if (drawer) {
+                drawer.classList.add('open');
+                document.body.style.overflow = 'hidden';
+
+                // Reinicializar ícones do Lucide
+                setTimeout(() => {
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                }, 100);
+            }
+        }
+
+        // Fechar drawer
+        function fecharSalaCorteDrawer() {
+            const drawer = document.getElementById('salaCorteDrawer');
+            if (drawer) {
+                drawer.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Calcular Impacto Financeiro das Perdas
+        function calcularImpactoFinanceiro() {
+            const perdasInput = document.getElementById('perdasCorteInput');
+            const impactoValue = document.getElementById('impactoFinanceiroValue');
+
+            if (perdasInput && impactoValue) {
+                const quantidade = parseInt(perdasInput.value) || 0;
+                // Custo estimado por muda: R$ 2,50
+                const custoPorMuda = 2.50;
+                const impacto = quantidade * custoPorMuda;
+
+                // Formatar como moeda brasileira
+                const impactoFormatado = impacto.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                });
+
+                impactoValue.textContent = impactoFormatado;
+            }
+        }
+
+        // ========================================
+        // FUNÇÕES: DRAWER SALA DE FUSÃO
+        // ========================================
+
+        // Abrir drawer ao clicar em cards "Sala de Fusão"
+        function abrirSalaFusaoDrawer() {
+            const drawer = document.getElementById('salaFusaoDrawer');
+            if (drawer) {
+                drawer.classList.add('open');
+                document.body.style.overflow = 'hidden';
+
+                // Reinicializar ícones do Lucide
+                setTimeout(() => {
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                }, 100);
+            }
+        }
+
+        // Fechar drawer
+        function fecharSalaFusaoDrawer() {
+            const drawer = document.getElementById('salaFusaoDrawer');
+            if (drawer) {
+                drawer.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,339 @@
+/* ========================================
+   DRAWER: SELEÇÃO DE CLASSE DO PRODUTO
+   ======================================== */
+
+/* Overlay do drawer */
+.class-selector-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 9999;
+}
+
+.class-selector-overlay.active {
+    display: block;
+}
+
+/* Container do drawer */
+.class-selector-drawer {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100%;
+    background: #FFFFFF;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    transition: right 0.3s ease;
+    z-index: 10000;
+}
+
+.class-selector-drawer.active {
+    right: 0;
+}
+
+/* Header do drawer */
+.class-selector-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 24px;
+    border-bottom: 1px solid #E7E9E9;
+    flex-shrink: 0;
+}
+
+.class-selector-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #697282;
+    transition: color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.class-selector-close:hover {
+    color: #18191A;
+}
+
+.class-selector-close i {
+    width: 20px;
+    height: 20px;
+}
+
+.class-selector-title {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #18191A;
+    margin: 0 0 8px 0;
+}
+
+.class-selector-description {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 18px;
+    color: #697282;
+    margin: 0;
+}
+
+/* Campo de busca */
+.class-selector-search {
+    padding: 16px 24px;
+    border-bottom: 1px solid #E7E9E9;
+    flex-shrink: 0;
+}
+
+.class-search-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.class-search-input {
+    width: 100%;
+    padding: 10px 36px 10px 12px;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    color: #18191A;
+    background: #FFFFFF;
+    border: 1px solid #D1D5DB;
+    border-radius: 6px;
+    transition: all 200ms ease;
+}
+
+.class-search-input:focus {
+    outline: none;
+    border-color: #0068AB;
+    box-shadow: 0 0 0 3px rgba(0, 104, 171, 0.1);
+}
+
+.class-search-input::placeholder {
+    color: #9CA3AF;
+}
+
+.class-search-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #697282;
+    pointer-events: none;
+}
+
+/* Área de conteúdo com scroll */
+.class-selector-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 24px;
+}
+
+/* Árvore de categorias */
+.class-tree {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.class-tree-item {
+    margin: 0;
+    padding: 0;
+}
+
+.class-tree-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 8px;
+    width: 100%;
+    background: transparent;
+    border: none;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #18191A;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 150ms ease;
+    text-align: left;
+}
+
+.class-tree-toggle:hover {
+    background: #F7F7F8;
+}
+
+.class-tree-toggle .chevron {
+    width: 16px;
+    height: 16px;
+    color: #697282;
+    transition: transform 200ms ease;
+    flex-shrink: 0;
+}
+
+.class-tree-toggle.expanded .chevron {
+    transform: rotate(90deg);
+}
+
+.class-tree-toggle .folder-icon {
+    width: 16px;
+    height: 16px;
+    color: #697282;
+    flex-shrink: 0;
+}
+
+.class-tree-children {
+    list-style: none;
+    padding-left: 20px;
+    margin: 0;
+    display: none;
+}
+
+.class-tree-children.active {
+    display: block;
+}
+
+/* Item de classe selecionável */
+.class-item-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 8px 8px 28px;
+    width: 100%;
+    background: transparent;
+    border: none;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #18191A;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 150ms ease;
+    text-align: left;
+}
+
+.class-item-button:hover {
+    background: #F7F7F8;
+}
+
+.class-item-button.selected {
+    background: rgba(0, 104, 171, 0.1);
+    color: #0068AB;
+    font-weight: 500;
+}
+
+.class-item-button .file-icon {
+    width: 16px;
+    height: 16px;
+    color: #0068AB;
+    flex-shrink: 0;
+}
+
+.class-item-code {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    margin-right: 8px;
+}
+
+/* Seção de selecionado */
+.class-selector-selected {
+    padding: 16px 24px;
+    border-top: 1px solid #E7E9E9;
+    background: #F7F7F8;
+    flex-shrink: 0;
+}
+
+.class-selector-selected-label {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #697282;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 8px 0;
+}
+
+.class-selector-selected-value {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #18191A;
+    margin: 0;
+}
+
+/* Footer do drawer */
+.class-selector-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px;
+    border-top: 1px solid #E7E9E9;
+    background: #FFFFFF;
+    flex-shrink: 0;
+}
+
+.btn-class-cancel {
+    padding: 10px 20px;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #697282;
+    background: #FFFFFF;
+    border: 1px solid #D1D5DB;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 200ms ease;
+}
+
+.btn-class-cancel:hover {
+    background: #F7F7F8;
+    border-color: #9CA3AF;
+}
+
+.btn-class-select {
+    padding: 10px 20px;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #FFFFFF;
+    background: #0068AB;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 200ms ease;
+}
+
+.btn-class-select:hover {
+    background: #005A94;
+}
+
+.btn-class-select:disabled {
+    background: #9CA3AF;
+    cursor: not-allowed;
+}
+
+/* Scrollbar customizada */
+.class-selector-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.class-selector-content::-webkit-scrollbar-track {
+    background: #F7F7F8;
+}
+
+.class-selector-content::-webkit-scrollbar-thumb {
+    background: #D1D5DB;
+    border-radius: 4px;
+}
+
+.class-selector-content::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF;
+}

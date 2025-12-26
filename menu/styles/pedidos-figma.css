@@ -1,0 +1,39 @@
+/* ========================================
+   PEDIDOS - CORES E VARIÁVEIS DO FIGMA
+   Node: 40000547:4537
+   Extraído em: 2025-01-21
+   ======================================== */
+
+:root {
+    /* Backgrounds */
+    --pedidos-bg-column: #F7F7F8;
+    --pedidos-bg-column-header: #F1F2F2;
+    --pedidos-bg-card: #FFFFFF;
+    --pedidos-bg-tab-active: rgba(6, 73, 116, 0.10);
+    --pedidos-bg-badge-filter: rgba(6, 73, 116, 0.10);
+    --pedidos-bg-badge-faturado: rgba(26, 147, 56, 0.10);
+
+    /* Borders */
+    --pedidos-border-black: #000000;
+    --pedidos-border-gray: #E5E7EB;
+    --pedidos-border-badge: #064974;
+
+    /* Text Colors */
+    --pedidos-text-primary: #18191A;
+    --pedidos-text-secondary: #61666A;
+    --pedidos-text-tertiary: #697282;
+    --pedidos-text-blue: #0068AB;
+    --pedidos-text-green: #00A03B;
+    --pedidos-text-dark-green: #0C451B;
+    --pedidos-text-tab-inactive: #4F5857;
+
+    /* Status Colors */
+    --pedidos-status-green-fill: #1A9338;
+    --pedidos-status-green-dot: #0C451B;
+
+    /* Icon Strokes */
+    --pedidos-icon-stroke: #6A7282;
+
+    /* Typography */
+    --pedidos-font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}

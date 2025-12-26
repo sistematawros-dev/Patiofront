@@ -1,0 +1,344 @@
+/* ========================================
+   DRAWER - CASA DE VEGETAÇÃO
+   ======================================== */
+
+/* Reutiliza os estilos base do drawer anterior */
+
+/* Rastreabilidade do Lote */
+.drawer-rastreabilidade-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.drawer-qrcode-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.drawer-qrcode {
+    width: 120px;
+    height: 120px;
+    border: 2px solid #E7E9E9;
+    border-radius: 6px;
+    padding: 8px;
+    background: #FFFFFF;
+}
+
+.drawer-qrcode-label {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: #61666A;
+}
+
+.drawer-rastreabilidade-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.drawer-rastreabilidade-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.drawer-rastreabilidade-label {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: #9CA3AF;
+}
+
+.drawer-rastreabilidade-value {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #18191A;
+}
+
+.drawer-rastreabilidade-value.highlight {
+    color: #10B981;
+}
+
+/* Estufa e Localização Header */
+.drawer-estufa-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #F9FAFA;
+    border: 1px solid #E7E9E9;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 12px;
+    color: #61666A;
+}
+
+.drawer-estufa-stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.drawer-estufa-stat-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.drawer-estufa-stat-dot.total {
+    background: #9CA3AF;
+}
+
+.drawer-estufa-stat-dot.ocupada {
+    background: #DC2626;
+}
+
+.drawer-estufa-stat-dot.livre {
+    background: #10B981;
+}
+
+.drawer-estufa-stat-separator {
+    margin: 0 4px;
+    color: #D1D5DB;
+}
+
+/* Estufa Grid */
+.drawer-estufa-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* Endereço Atual */
+.drawer-endereco-atual {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.drawer-endereco-title {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #18191A;
+    margin-bottom: 8px;
+}
+
+.drawer-endereco-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.drawer-endereco-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.drawer-endereco-label {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    color: #9CA3AF;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.drawer-endereco-value {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #18191A;
+    line-height: 1;
+}
+
+.drawer-localizacao-confirm {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 11px;
+    color: #10B981;
+    font-weight: 500;
+}
+
+.drawer-localizacao-confirm::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #10B981;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Status do Local */
+.drawer-status-local {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.drawer-status-title {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #18191A;
+    margin-bottom: 12px;
+}
+
+.drawer-status-card {
+    padding: 12px 14px;
+    border-radius: 6px;
+    border: 1px solid;
+}
+
+.drawer-status-card.operacional {
+    background: #D1FAE5;
+    border-color: #A7F3D0;
+}
+
+.drawer-status-card.em-limpeza {
+    background: #FEF3C7;
+    border-color: #FCD34D;
+}
+
+.drawer-status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.drawer-status-name {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.drawer-status-card.operacional .drawer-status-name {
+    color: #065F46;
+}
+
+.drawer-status-card.em-limpeza .drawer-status-name {
+    color: #92400E;
+}
+
+.drawer-status-badge {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.drawer-status-card.operacional .drawer-status-badge {
+    background: #10B981;
+    color: #FFFFFF;
+}
+
+.drawer-status-card.em-limpeza .drawer-status-badge {
+    background: #F59E0B;
+    color: #FFFFFF;
+}
+
+.drawer-status-description {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.drawer-status-card.operacional .drawer-status-description {
+    color: #047857;
+}
+
+.drawer-status-card.em-limpeza .drawer-status-description {
+    color: #92400E;
+}
+
+/* Registro de Insumos */
+.drawer-insumos-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.drawer-insumos-title {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #18191A;
+}
+
+.drawer-adicionar-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    background: transparent;
+    border: none;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #0068AB;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.drawer-adicionar-btn:hover {
+    color: #005a94;
+}
+
+.drawer-insumos-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.drawer-insumo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    background: #F9FAFA;
+    border: 1px solid #E7E9E9;
+    border-radius: 6px;
+}
+
+.drawer-insumo-name {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #18191A;
+}
+
+.drawer-insumo-quantidade {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #61666A;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .drawer-rastreabilidade-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .drawer-estufa-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .drawer-rastreabilidade-info {
+        grid-template-columns: 1fr;
+    }
+}

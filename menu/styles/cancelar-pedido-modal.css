@@ -1,0 +1,205 @@
+/* ========================================
+   MODAL: CANCELAR PEDIDO
+   ======================================== */
+
+.modal-cancelar {
+    width: 900px;
+    max-width: 95vw;
+    max-height: 90vh;
+}
+
+.modal-body-cancelar {
+    padding: 24px;
+    overflow-y: auto;
+    max-height: calc(90vh - 180px);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Aviso */
+.cancelar-aviso {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: #FEF2F2;
+    border: 1px solid #FEE2E2;
+    border-left: 3px solid #DC2626;
+    border-radius: 6px;
+    padding: 16px;
+}
+
+.cancelar-aviso-destaque {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #DC2626;
+    margin: 0;
+}
+
+.cancelar-aviso-texto {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #991B1B;
+    margin: 0;
+}
+
+/* Tabela */
+.cancelar-table-container {
+    overflow-x: auto;
+    border: 1px solid #E7E9E9;
+    border-radius: 8px;
+}
+
+.cancelar-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #FFFFFF;
+}
+
+.cancelar-table thead {
+    background: #F7F7F8;
+}
+
+.cancelar-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #697282;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    border-bottom: 1px solid #E7E9E9;
+}
+
+.cancelar-table tbody tr {
+    border-bottom: 1px solid #E7E9E9;
+}
+
+.cancelar-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.cancelar-table td {
+    padding: 16px;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    color: #18191A;
+    white-space: nowrap;
+}
+
+.cancelar-produto {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.cancelar-produto-nome {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #18191A;
+}
+
+.cancelar-produto-codigo {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    color: #697282;
+}
+
+.cancelar-input {
+    width: 80px;
+    padding: 8px 12px;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    color: #18191A;
+    background: #FFFFFF;
+    border: 1px solid #D1D5DB;
+    border-radius: 6px;
+    transition: all 200ms ease;
+}
+
+.cancelar-input:focus {
+    outline: none;
+    border-color: #0068AB;
+    box-shadow: 0 0 0 3px rgba(0, 104, 171, 0.1);
+}
+
+.cancelar-input::-webkit-inner-spin-button,
+.cancelar-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.cancelar-input {
+    -moz-appearance: textfield;
+}
+
+/* Footer */
+.modal-footer-cancelar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 24px;
+    border-top: 1px solid #E7E9E9;
+    background: #FFFFFF;
+}
+
+.btn-cancelar-modal {
+    padding: 10px 20px;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #697282;
+    background: #FFFFFF;
+    border: 1px solid #D1D5DB;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 200ms ease;
+}
+
+.btn-cancelar-modal:hover {
+    background: #F7F7F8;
+    border-color: #9CA3AF;
+}
+
+.btn-confirmar-cancelamento {
+    padding: 10px 20px;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #FFFFFF;
+    background: #DC2626;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 200ms ease;
+}
+
+.btn-confirmar-cancelamento:hover {
+    background: #B91C1C;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .modal-cancelar {
+        width: 100%;
+        max-width: 100vw;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+
+    .modal-body-cancelar {
+        max-height: calc(100vh - 180px);
+    }
+
+    .cancelar-table-container {
+        overflow-x: scroll;
+    }
+}

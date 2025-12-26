@@ -1,0 +1,292 @@
+/* ========================================
+   DRAWER - SALA DE FUSÃO
+   ======================================== */
+
+/* Reutiliza os estilos base do drawer anterior */
+
+/* Sala de Fusão Info Box */
+.drawer-fusao-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 16px;
+    background: #F9FAFA;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.drawer-fusao-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.drawer-fusao-label {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #61666A;
+    text-transform: capitalize;
+}
+
+.drawer-fusao-value {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #18191A;
+}
+
+/* Timeline Section */
+.drawer-timeline-container {
+    margin-bottom: 20px;
+}
+
+.drawer-timeline {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.drawer-timeline-point {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.drawer-timeline-icon {
+    width: 48px;
+    height: 48px;
+    background: #0068AB;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+}
+
+.drawer-timeline-icon i {
+    width: 24px;
+    height: 24px;
+}
+
+.drawer-timeline-date {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #18191A;
+}
+
+.drawer-timeline-weekday {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: #61666A;
+}
+
+.drawer-timeline-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.drawer-timeline-days {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #18191A;
+    line-height: 1;
+}
+
+.drawer-timeline-label {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #61666A;
+}
+
+/* Progress Bar */
+.drawer-fusao-progress {
+    margin-bottom: 20px;
+}
+
+.drawer-fusao-progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.drawer-fusao-progress-label {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #61666A;
+}
+
+.drawer-fusao-progress-bar {
+    width: 100%;
+    height: 12px;
+    background: #E7E9E9;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.drawer-fusao-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #0068AB 0%, #3B82F6 100%);
+    border-radius: 6px;
+    transition: width 0.3s ease;
+}
+
+/* Localização Atual */
+.drawer-localizacao-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    background: #F9FAFA;
+    border: 1px solid #E7E9E9;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.drawer-localizacao-icon {
+    width: 40px;
+    height: 40px;
+    background: #FFFFFF;
+    border: 1px solid #E7E9E9;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #61666A;
+    flex-shrink: 0;
+}
+
+.drawer-localizacao-icon i {
+    width: 20px;
+    height: 20px;
+}
+
+.drawer-localizacao-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.drawer-localizacao-title {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #61666A;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.drawer-localizacao-name {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #18191A;
+    line-height: 1.3;
+}
+
+.drawer-localizacao-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: #10B981;
+}
+
+.drawer-localizacao-status::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #10B981;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Destino Section */
+.drawer-destino-section-title {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #18191A;
+    margin-bottom: 12px;
+}
+
+.drawer-destino-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.drawer-destino-field-label {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #61666A;
+}
+
+.drawer-destino-select {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    background: #FFFFFF;
+    border: 1px solid #E7E9E9;
+    border-radius: 6px;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    color: #9CA3AF;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2361666A' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+}
+
+.drawer-destino-select:focus {
+    outline: none;
+    border-color: #0068AB;
+    box-shadow: 0 0 0 3px rgba(0, 104, 171, 0.1);
+    color: #18191A;
+}
+
+.drawer-destino-select:not(:placeholder-shown) {
+    color: #18191A;
+}
+
+/* Section Divider */
+.drawer-fusao-divider {
+    height: 1px;
+    background: #E7E9E9;
+    margin: 24px 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .drawer-fusao-info {
+        grid-template-columns: 1fr;
+    }
+
+    .drawer-timeline {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .drawer-timeline-center {
+        order: -1;
+    }
+}

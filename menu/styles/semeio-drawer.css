@@ -1,0 +1,255 @@
+/* ========================================
+   DRAWER - SEMEIO
+   ======================================== */
+
+/* Reutiliza os estilos base do drawer anterior */
+
+/* Cards de Monitoramento */
+.drawer-monitoring-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.drawer-monitoring-card {
+    padding: 12px;
+    background: #F9FAFA;
+    border: 1px solid #E7E9E9;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.drawer-monitoring-card.highlight-blue {
+    background: #EFF6FF;
+    border-color: #BFDBFE;
+}
+
+.drawer-monitoring-card.highlight-green {
+    background: #D1FAE5;
+    border-color: #A7F3D0;
+}
+
+.drawer-monitoring-label {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: #61666A;
+    line-height: 1.3;
+}
+
+.drawer-monitoring-card.highlight-blue .drawer-monitoring-label {
+    color: #1E40AF;
+}
+
+.drawer-monitoring-card.highlight-green .drawer-monitoring-label {
+    color: #065F46;
+}
+
+.drawer-monitoring-value {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #18191A;
+    line-height: 1.2;
+}
+
+.drawer-monitoring-card.highlight-blue .drawer-monitoring-value {
+    color: #0068AB;
+}
+
+.drawer-monitoring-card.highlight-green .drawer-monitoring-value {
+    color: #047857;
+}
+
+/* Toggle Buttons (Tipo de Semeio) */
+.drawer-toggle-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.drawer-toggle-btn {
+    flex: 1;
+    padding: 10px 16px;
+    background: #FFFFFF;
+    border: 1px solid #E7E9E9;
+    border-radius: 6px;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #61666A;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.drawer-toggle-btn:hover {
+    border-color: #0068AB;
+}
+
+.drawer-toggle-btn.active {
+    background: #0068AB;
+    border-color: #0068AB;
+    color: #FFFFFF;
+}
+
+/* Time Display */
+.drawer-time-display {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: #F9FAFA;
+    border: 1px solid #E7E9E9;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.drawer-time-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-right: 16px;
+    border-right: 1px solid #E7E9E9;
+}
+
+.drawer-time-icon {
+    width: 20px;
+    height: 20px;
+    color: #0068AB;
+}
+
+.drawer-time-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.drawer-time-label {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: #61666A;
+}
+
+.drawer-time-value {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #18191A;
+    line-height: 1;
+}
+
+.drawer-time-extra {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.drawer-time-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    background: #D1FAE5;
+    color: #065F46;
+    border-radius: 4px;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    align-self: flex-start;
+}
+
+.drawer-time-info {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 11px;
+    color: #61666A;
+}
+
+/* Select/Dropdown */
+.drawer-select {
+    width: 100%;
+    height: 40px;
+    padding: 0 12px;
+    background: #FFFFFF;
+    border: 1px solid #E7E9E9;
+    border-radius: 6px;
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 13px;
+    color: #9CA3AF;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2361666A' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+}
+
+.drawer-select:focus {
+    outline: none;
+    border-color: #0068AB;
+    box-shadow: 0 0 0 3px rgba(0, 104, 171, 0.1);
+    color: #18191A;
+}
+
+/* Info Box com ícone */
+.drawer-info-box {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #F9FAFA;
+    border: 1px solid #E7E9E9;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.drawer-info-box-icon {
+    width: 20px;
+    height: 20px;
+    color: #61666A;
+    flex-shrink: 0;
+}
+
+.drawer-info-box-content {
+    flex: 1;
+}
+
+.drawer-info-box-text {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 12px;
+    color: #61666A;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.drawer-info-box-alert {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    font-size: 12px;
+    color: #DC2626;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .drawer-monitoring-cards {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .drawer-time-display {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .drawer-time-main {
+        padding-right: 0;
+        border-right: none;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #E7E9E9;
+        width: 100%;
+    }
+}
